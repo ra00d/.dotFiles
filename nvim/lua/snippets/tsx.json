@@ -1,0 +1,12 @@
+{
+	"reactFunctionComponent": {
+		"prefix": "rfc",
+		"body": "\nexport const ${1:$TM_FILENAME_BASE} = () => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t)\n}",
+		"description": "Creates a React functional component without PropTypes"
+	},
+	"useState": {
+		"prefix": "us",
+		"body": "const [${1:state}, set${1/(.*)/${1:/TM_capitalize}/}] = useState(${2:initValue})$0",
+		"description": "React useState() hook"
+	}
+}

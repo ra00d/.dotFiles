@@ -1,0 +1,10 @@
+tap "homebrew/bundle"
+brew "autojump"
+brew "btop"
+brew "gh"
+brew "go"
+brew "neovim"
+brew "node"
+brew "ruby"
+brew "zsh"
+
