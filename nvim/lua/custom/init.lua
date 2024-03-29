@@ -2,6 +2,7 @@ require("custom.settings")
 require("custom.mappings")
 require("custom.helpers")
 require("custom.snippets")
+require('custom.lsp')
 
 
 

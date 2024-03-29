@@ -4,10 +4,10 @@ return {
   config = function()
     local linter = require("lint")
     linter.linters_by_ft = {
-      javascript = { "biome" },
-      typescript = { "biome" },
-      javascriptreact = { "biome" },
-      typescriptreact = { "biome" },
+      javascript = { "biome", "eslint_d", "eslint" },
+      typescript = { "biome", "eslint_d", "eslint" },
+      javascriptreact = { "biome", "eslint_d", "eslint" },
+      typescriptreact = { "biome", "eslint_d", "eslint" },
       go = { "golangcilint" }
     }
   end

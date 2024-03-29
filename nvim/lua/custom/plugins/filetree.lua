@@ -1,6 +1,83 @@
 -- Unless you are still migrating, remove the deprecated commands from v1.x
 vim.cmd([[ let g:neo_tree_remove_legacy_commands = 1 ]])
+local default_components = {
+  container = {
+    enable_character_fade = true
+  },
+  indent = {
+    indent_size = 2,
+    padding = 1, -- extra padding on left hand side
+    -- indent guides
+    with_markers = true,
+    indent_marker = "│",
+    last_indent_marker = "└",
+    highlight = "NeoTreeIndentMarker",
+    -- expander config, needed for nesting files
+    with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
+    expander_collapsed = "",
+    expander_expanded = "",
+    expander_highlight = "NeoTreeExpander",
+  },
+  icon = {
+    folder_closed = "",
+    folder_open = "",
+    folder_empty = "󰜌",
+    -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
+    -- then these will never be used.
+    default = "*",
+    highlight = "NeoTreeFileIcon"
+  },
+  modified = {
+    symbol = "●",
+    highlight = "NeoTreeModified",
+  },
+  name = {
+    trailing_slash = false,
+    use_git_status_colors = true,
+    highlight = "NeoTreeFileName",
+  },
+  git_status = {
+    symbols = {
+      -- Change type
+      added     = ' ', -- or "✚", but this is redundant info if you use git_status_colors on the name
+      modified  = '󰝤 ', -- or "", but this is redundant info if you use git_status_colors on the name
+      deleted   = ' ', -- this can only be used in the git_status source
+      renamed   = "󰁕", -- this can only be used in the git_status source
+      -- Status type
+      untracked = "",
+      ignored   = "",
+      unstaged  = "󰄱",
+      staged    = "",
+      conflict  = "",
+    },
+    highlights = {
+      conflict = {
+        fg = "green"
+      }
+    }
+  },
+  -- If you don't want to use these columns, you can set `enabled = false` for each of them individually
+  file_size = {
+    enabled = true,
+    required_width = 64, -- min width of window required to show this column
+  },
+  type = {
+    enabled = true,
+    required_width = 122, -- min width of window required to show this column
+  },
+  last_modified = {
+    enabled = false,
+    required_width = 88, -- min width of window required to show this column
+  },
+  created = {
+    enabled = true,
+    required_width = 110, -- min width of window required to show this column
+  },
+  symlink_target = {
+    enabled = false,
+  },
 
+}
 return {
   "nvim-neo-tree/neo-tree.nvim",
   version = "*",
@@ -12,20 +89,21 @@ return {
   config = function()
     require('neo-tree').setup {
       close_if_last_window = true,
+      enable_normal_mode_for_inputs = false,
       filesystem = {
         commands = {
-          -- open_file = function(state)
-          --   local node = state.tree:get_node()
-          --   if node and node.type == "file" then
-          --     -- local file_path = node:get_id()
-          --     -- reuse built-in commands to open and clear filter
-          --     local cmds = require("neo-tree.sources.filesystem.commands")
-          --     cmds.open(state)
-          --     -- cmds.clear_filter(state)
-          --     -- reveal the selected file without focusing the tree
-          --     -- require("neo-tree.sources.filesystem").navigate(state, state.path, file_path)
-          --   end
-          -- end
+          open_file = function(state)
+            local node = state.tree:get_node()
+            if node and node.type == "file" then
+              -- local file_path = node:get_id()
+              -- reuse built-in commands to open and clear filter
+              local cmds = require("neo-tree.sources.filesystem.commands")
+              cmds.open(state)
+              -- cmds.clear_filter(state)
+              -- reveal the selected file without focusing the tree
+              -- require("neo-tree.sources.filesystem").navigate(state, state.path, file_path)
+            end
+          end
         },
         filtered_items = {
           visible = true, -- when true, they will just be displayed differently than normal items
@@ -45,7 +123,39 @@ return {
           }
         },
         window = { mappings = { ['o'] = "open", } },
-      },
+        components = {
+          harpoon_index = function(config, node, _)
+            local harpoon_list = require("harpoon").get_mark_config().marks
+            local path = node:get_id()
+            local harpoon_key = vim.uv.cwd()
+
+            for i, item in ipairs(harpoon_list) do
+              local value = item.filename
+              if string.sub(item.filename, 1, 1) ~= "/" then
+                value = harpoon_key .. "/" .. item.filename
+              end
+
+              if value == path then
+                vim.print(path)
+                return {
+                  text = string.format(" ⥤ %d", i), -- <-- Add your favorite harpoon like arrow here
+                  highlight = config.highlight or "NeoTreeDirectoryIcon",
+                }
+              end
+            end
+            return {}
+          end,
+        },
+        renderers = {
+          file = {
+            { "icon" },
+            { "name",         use_git_status_colors = true },
+            { "harpoon_index" }, --> This is what actually adds the component in where you want it
+            { "diagnostics" },
+            { "git_status",   highlight = "NeoTreeDimText" },
+          },
+        }, },
+
       event_handlers = {
 
         {
@@ -57,42 +167,25 @@ return {
             require("neo-tree.command").execute({ action = "close" })
           end
         },
-        -- {
-        --   event = 'file_added',
-        --   handler = function(file_path)
-        --     -- local isDirectory = vim.fn.isdirectory(file_path) == 1
-        --     local isFile = vim.fn.filereadable(file_path) == 1
-        --     if isFile then
-        --       vim.cmd('e ' .. file_path)
-        --       -- require("neo-tree.command").execute({ action = "close" })
-        --     end
-        --   end
-        -- },
-      },
-      components = {
-        harpoon_index = function(config, node, state)
-          local Marked = require("harpoon.mark")
-          local path = node:get_id()
-          local succuss, index = pcall(Marked.get_index_of, path)
-          if succuss and index and index > 0 then
-            return {
-              text = string.format("→ h %d", index), -- <-- Add your favorite harpoon like arrow here
-              highlight = config.highlight or "NeoTreeDirectoryIcon",
-            }
-          else
-            return {}
+        {
+          event = 'file_added',
+          handler = function(file_path)
+            -- print(file_path)
+            -- require("neo-tree.command").execute({ action = "close" })
+            local state = require("neo-tree.sources.manager").get_state_for_window()
+            local isFile = vim.fn.filereadable(file_path) == 1
+            if isFile then
+              vim.cmd('e ' .. file_path)
+            end
+            require("neo-tree.sources.common.commands").close_window(state)
+            -- vim.cmd("Neotree close")
           end
-        end
+          -- command = 'open_file',
+          -- handler = "open_file"
+        },
       },
-      renderers = {
-        file = {
-          { "harpoon_index" }, --> This is what actually adds the component in where you want it
-          { "icon" },
-          { "name",         use_git_status_colors = true },
-          { "diagnostics" },
-          { "git_status",   highlight = "NeoTreeDimText" },
-        }
-      },
+
+      default_component_configs = default_components,
     }
   end,
 }

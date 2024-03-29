@@ -1,33 +1,36 @@
+-- https://github.com/NvChad/nvim-colorizer.lua
+
+local opts = {
+  filetypes = {
+    "*",
+    -- "!dart",
+
+    -- Excluded filteypes.
+    "!lazy", -- Commit hashes get highlighted sometimes.
+  },
+  user_default_options = {
+    RGB = true,      -- #RGB hex codes.
+    RRGGBB = true,   -- #RRGGBB hex codes.
+    RRGGBBAA = true, -- #RRGGBBAA hex codes.
+    AARRGGBB = true, -- 0xAARRGGBB hex codes.
+
+    -- "Name" codes like Blue or blue. It is pretty annoying when you have maps with
+    -- 'blue = color_hex': you get two previews, one for the key and one for the value.
+    names = true,
+
+    rgb_fn = true, -- CSS rgb() and rgba() functions.
+    hsl_fn = true, -- CSS hsl() and hsla() functions.
+    css = true,    -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB.
+    css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn.
+    tailwind = true,
+
+    mode = "background",
+    virtualtext = "■",
+  },
+}
+
 return {
-  'NvChad/nvim-colorizer.lua',
-  conf = function()
-    require("colorizer").setup {
-      filetypes = { "*" },
-      user_default_options = {
-        RGB = true,           -- #RGB hex codes
-        RRGGBB = true,        -- #RRGGBB hex codes
-        names = true,         -- "Name" codes like Blue or blue
-        RRGGBBAA = false,     -- #RRGGBBAA hex codes
-        AARRGGBB = false,     -- 0xAARRGGBB hex codes
-        rgb_fn = false,       -- CSS rgb() and rgba() functions
-        hsl_fn = false,       -- CSS hsl() and hsla() functions
-        css = false,          -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-        css_fn = false,       -- Enable all CSS *functions*: rgb_fn, hsl_fn
-        -- Available modes for `mode`: foreground, background,  virtualtext
-        mode = "virtualtext", -- Set the display mode.
-        -- Available methods are false / true / "normal" / "lsp" / "both"
-        -- True is same as normal
-        tailwind = true,                                 -- Enable tailwind colors
-        -- parsers can contain values used in |user_default_options|
-        sass = { enable = false, parsers = { "css" }, }, -- Enable sass colors
-        virtualtext = "■",
-        -- update color values even if buffer is not focused
-        -- example use: cmp_menu, cmp_docs
-        always_update = false
-      },
-      -- all the sub-options of filetypes apply to buftypes
-      buftypes = {},
-    }
-    require("colorizer").attach_to_buffer(0, { mode = "background", css = true })
-  end
+  "NvChad/nvim-colorizer.lua",
+  event = { "BufReadPost", "BufNewFile" },
+  opts = opts,
 }

@@ -60,7 +60,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -79,6 +79,10 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
+bindkey '^I'      autosuggest-accept
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(buffer-empty bracketed-paste accept-line push-line-or-edit)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_USE_ASYNC=true
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -170,6 +174,7 @@ alias nv="nvim"
 #                                                               #
 # aliases 
 alias ls="colorls -lAtr "
+alias lls="ls"
 alias zs="source ~/.zshrc"
 alias zc="nvim ~/.zshrc"
 # copy and move with confirmation
@@ -183,6 +188,11 @@ alias kill="kill -9"
 alias ..="cd .."
 alias ...="cd ../.."
 
+# mysql
+alias msq="mysql -u root"
+
+#git
+alias g="git"
 
 
 # pnpm
@@ -191,6 +201,9 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
+alias p="pnpm"
+alias pdev="p dev"
+alias px="pnpx"
 # pnpm end
 
 # Load Angular CLI autocompletion.
@@ -205,5 +218,18 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-export PATH="/home/linuxbrew/.linuxbrew/opt/php@7.4/bin:$PATH"
-export PATH="/home/linuxbrew/.linuxbrew/opt/php@7.4/sbin:$PATH"
+
+
+
+#################### PATH ####################################
+#
+
+export PATH="/mnt/c/Windows:$PATH"
+export PATH="/mnt/c/Program Files/Docker/Docker/resources/bin:$PATH"
+export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
+export PATH="/snap/bin:$PATH"
+
+# Android
+export PATH=$HOME/android/cmdline-tools/12.0/bin:$PATH
+export PATH=$HOME/android/emulator:$PATH
+export PATH=$HOME/android/platform-tools:$PATH
