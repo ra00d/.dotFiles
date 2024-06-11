@@ -25,7 +25,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+CASE_SENSITIVE="true"
 
 # Uncomment the following line to use hyphen-insensitive completion.
 # Case-sensitive completion must be off. _ and - will be interchangeable.
@@ -55,7 +55,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # You can also set it to another string to have that shown instead of the default red dots.
 # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -79,7 +79,16 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
+
+bindkey -e
+
 bindkey '^I'      autosuggest-accept
+bindkey '^e'      autosuggest-accept
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+
+
+
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(buffer-empty bracketed-paste accept-line push-line-or-edit)
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=true
@@ -139,7 +148,7 @@ export PATH=$PATH:$(go env GOROOT)/misc/wasm
 # TMUX CONFIG
 export TMUX_CONF=~/.dotFiles/tmux/tmux.conf
 export TERM="xterm-256color"
-alias tmux='tmux -2'
+# alias tmux='tmux -2'
 alias ts='tmux -2 new-session -s ${PWD##*/}'
 set -g default-terminal "xterm"
 alias ta='tmux -2 attach'
@@ -148,10 +157,15 @@ alias ta='tmux -2 attach'
 #################### AUTOJUMP ####################################
 #                                                            #
 # AUTOJUMP CONFIG
- [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
+ # [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
 
 
-### DATABASE RELATED CONFIGURATION 
+#################### FZF ####################################
+source <(fzf --zsh)
+
+
+
+#################### DATABASE RELATED CONFIGURATION ##################
 # POSTGRESQL CONFIG
 export PATH="/home/linuxbrew/.linuxbrew/opt/postgresql@16/bin:$PATH"
 export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/postgresql@16/lib"
@@ -163,18 +177,23 @@ vv() {
  
   # If I exit fzf without selecting a config, don't open Neovim
   [[ -z $config ]] && echo "No config selected" && return
- 
   # Open Neovim with the selected config
   NVIM_APPNAME=$(basename $config) nvim
 }
 # vim aliases
-alias v="nvim"
-alias nv="nvim"
+export NVIM_APPNAME="chad-nvim"
+alias v="nvim ."
+alias vim="nvim ."
+alias nv="nvim ."
+alias obsidian="~/bin/obsidian"
 #################### ALIASES ####################################
 #                                                               #
 # aliases 
-alias ls="colorls -lAtr "
-alias lls="ls"
+alias ls="eza -l --icons --git -a"
+alias lst="eza --tree --level=2 --long --icons --git"
+# alias cd=z
+# alias j=z
+
 alias zs="source ~/.zshrc"
 alias zc="nvim ~/.zshrc"
 # copy and move with confirmation
@@ -193,21 +212,36 @@ alias msq="mysql -u root"
 
 #git
 alias g="git"
+alias gs="git status"
+alias gP="git pull"
 
+# @nestjs/cli
+alias nn="nest new"
+alias ng="nest generate"
+alias n="nest"
+# INSTALL ALL DEPENDENCIES
+alias nest-set="pnpm add @nestjs/config @nestjs/typeorm typeorm mysql2 class-validator class-transformer @nestjs/serve-static @nestjs/passport passport passport-local express-session cookie-parser helmet"
+# INSTALL ALL DEV DEPENDENCIES
+alias nest-set-dev="pnpm add -D @types/cookie-parser @types/express-session @types/passport-local @types/multer"
 
+# php artisan
+alias art="php artisan"
+
+# python
+alias py=python3
+alias pip=pip3
 # pnpm
 export PNPM_HOME="/home/ra0_0d/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-alias p="pnpm"
-alias pdev="p dev"
-alias px="pnpx"
+alias p=pnpm
+alias pdev="pnpm dev"
 # pnpm end
 
 # Load Angular CLI autocompletion.
-source <(ng completion script)
+# source <(ng completion script)
 
 # bun completions
 [ -s "/home/ra0_0d/.bun/_bun" ] && source "/home/ra0_0d/.bun/_bun"
@@ -233,3 +267,65 @@ export PATH="/snap/bin:$PATH"
 export PATH=$HOME/android/cmdline-tools/12.0/bin:$PATH
 export PATH=$HOME/android/emulator:$PATH
 export PATH=$HOME/android/platform-tools:$PATH
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# =============================================================================
+#
+# Utility functions for zoxide.
+#
+
+# pwd based on the value of _ZO_RESOLVE_SYMLINKS.
+function __zoxide_pwd() {
+    \builtin pwd -L
+}
+
+# cd + custom logic based on the value of _ZO_ECHO.
+function __zoxide_cd() {
+    # shellcheck disable=SC2164
+    \builtin cd -- "$@"
+}
+
+# =============================================================================
+#
+# Hook configuration for zoxide.
+#
+
+# Hook to add new entries to the database.
+function __zoxide_hook() {
+    # shellcheck disable=SC2312
+    \command zoxide add -- "$(__zoxide_pwd)"
+}
+
+# Initialize hook.
+# shellcheck disable=SC2154
+if [[ ${precmd_functions[(Ie)__zoxide_hook]:-} -eq 0 ]] && [[ ${chpwd_functions[(Ie)__zoxide_hook]:-} -eq 0 ]]; then
+    chpwd_functions+=(__zoxide_hook)
+fi
+
+# =============================================================================
+#
+# When using zoxide with --no-cmd, alias these internal functions as desired.
+#
+
+# Jump to a directory using only keywords.
+function __zoxide_z() {
+    # shellcheck disable=SC2199
+    if [[ "$#" -eq 0 ]]; then
+        __zoxide_cd ~
+    elif [[ "$#" -eq 1 ]] && { [[ -d "$1" ]] || [[ "$1" = '-' ]] || [[ "$1" =~ ^[-+][0-9]$ ]]; }; then
+        __zoxide_cd "$1"
+    else
+        \builtin local result
+        # shellcheck disable=SC2312
+        result="$(\command zoxide query --exclude "$(__zoxide_pwd)" -- "$@")" && __zoxide_cd "${result}"
+    fi
+}
+
+# Jump to a directory using interactive search.
+function __zoxide_zi() {
+    \builtin local result
+    result="$(\command zoxide query --interactive -- "$@")" && __zoxide_cd "${result}"
+}
+eval "$(zoxide init zsh)"
