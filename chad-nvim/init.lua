@@ -1,14 +1,14 @@
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 vim.g.mapleader = " "
 
-vim.loop.os_uname = function()
-  return {
-    sysname = "Linux",
-    machine = "x86_64",
-    release = " Ubuntu 22.04.2 LTS",
-    version = "#1 SMP Thu Jan 11 04:09:03 UTC 2024",
-  }
-end
+-- vim.loop.os_uname = function()
+--   return {
+--     sysname = "Linux",
+--     machine = "x86_64",
+--     release = " Ubuntu 22.04.2 LTS",
+--     version = "#1 SMP Thu Jan 11 04:09:03 UTC 2024",
+--   }
+-- end
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
@@ -20,7 +20,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 local lazy_config = require "configs.lazy"
-
 -- load plugins
 require("lazy").setup({
   {
@@ -39,11 +38,12 @@ require("lazy").setup({
 -- load theme
 dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
-
+dofile(vim.g.base46_cache .. "nvimtree")
 require "nvchad.autocmds"
+require "mappings"
 
 vim.schedule(function()
-  require "mappings"
-  require "options"
+  -- require "mappings"
+  -- require "options"
   require "autocmd"
 end)

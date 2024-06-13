@@ -1,9 +1,6 @@
-local options = {
-  actions = {
-    open_file = {
-      quit_on_open = true,
-    },
-  },
+local options = require "nvchad.configs.nvimtree"
+options.actions.open_file = {
+  quit_on_open = true,
 }
 require("nvim-tree").setup(options)
 local api = require "nvim-tree.api"

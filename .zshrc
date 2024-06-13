@@ -1,22 +1,27 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# export ZSH="$HOME/.oh-my-zsh"
+setopt prompt_subst
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit
+compinit
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -78,21 +83,25 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
-
+# plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
+source $HOME/.dotFiles/zsh-plugins/git.zsh
+source $HOME/.dotFiles/zsh-plugins/vi-mode.zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+bindkey '^w' autosuggest-execute
+bindkey '^e' autosuggest-accept
+bindkey '^u' autosuggest-toggle
+# bindkey '^L' vi-forward-word
+bindkey '^k' up-line-or-search
+bindkey '^j' down-line-or-search
 bindkey -e
-
-bindkey '^I'      autosuggest-accept
-bindkey '^e'      autosuggest-accept
-bindkey '^p' history-search-backward
-bindkey '^n' history-search-forward
 
 
 
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(buffer-empty bracketed-paste accept-line push-line-or-edit)
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=true
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -185,6 +194,8 @@ export NVIM_APPNAME="chad-nvim"
 alias v="nvim ."
 alias vim="nvim ."
 alias nv="nvim ."
+# VI Mode!!!
+bindkey jj vi-cmd-mode
 alias obsidian="~/bin/obsidian"
 #################### ALIASES ####################################
 #                                                               #
@@ -192,7 +203,9 @@ alias obsidian="~/bin/obsidian"
 alias ls="eza -l --icons --git -a"
 alias lst="eza --tree --level=2 --long --icons --git"
 # alias cd=z
-# alias j=z
+alias j=z
+alias l=ls
+alias lt=lst
 
 alias zs="source ~/.zshrc"
 alias zc="nvim ~/.zshrc"
@@ -251,7 +264,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
 
@@ -329,3 +342,5 @@ function __zoxide_zi() {
     result="$(\command zoxide query --interactive -- "$@")" && __zoxide_cd "${result}"
 }
 eval "$(zoxide init zsh)"
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.dotFiles/starship.toml

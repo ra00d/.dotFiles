@@ -1,7 +1,6 @@
 -- This file  needs to have same structure as nvconfig.lua
 -- https://github.com/NvChad/NvChad/blob/v2.5/lua/nvconfig.lua
 
----@type ChadrcConfig
 local M = {}
 M.ui = {
   theme = "catppuccin",
@@ -9,6 +8,7 @@ M.ui = {
   hl_override = {
     ["@comment"] = { italic = true },
     CursorLine = { bg = "gray" },
+    Cursor = { bg = "gray" },
   },
   -- lsp = {
   --   signature = false,
@@ -17,12 +17,12 @@ M.ui = {
     enabled = false,
   },
   statusline = {
-    theme = "vscode_colored",
+    theme = "minimal",
     separator_style = "block",
     modules = {
       file = function()
         local is_modified = vim.bo[0].modified
-        local modified = ""
+        local modified = " "
         if is_modified then
           modified = " "
         end
@@ -35,6 +35,9 @@ M.ui = {
       end,
     },
   },
+  lsp = {
+    signature = false,
+  },
+  -- telescope = { style = "bordered" },
 }
-
 return M
