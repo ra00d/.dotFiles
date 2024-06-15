@@ -4,7 +4,6 @@
 # if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 #   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 # fi
-
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -149,7 +148,7 @@ fi
 #                                                            #
 #
 export PATH="$HOME/go/bin:$PATH"
-export PATH=$PATH:$(go env GOROOT)/misc/wasm
+# export PATH=$PATH:$(go env GOROOT)/misc/wasm
 # export GOROOT="$HOME/go"
 ############### TOOLS AND TERMINAL  RELATED CONFIGURATION ####
 #################### TMUX ####################################
@@ -251,13 +250,14 @@ case ":$PATH:" in
 esac
 alias p=pnpm
 alias pdev="pnpm dev"
+
 # pnpm end
 
 # Load Angular CLI autocompletion.
 # source <(ng completion script)
 
 # bun completions
-[ -s "/home/ra0_0d/.bun/_bun" ] && source "/home/ra0_0d/.bun/_bun"
+# [ -s "/home/ra0_0d/.bun/_bun" ] && source "/home/ra0_0d/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -271,76 +271,20 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 #################### PATH ####################################
 #
 
-export PATH="/mnt/c/Windows:$PATH"
-export PATH="/mnt/c/Program Files/Docker/Docker/resources/bin:$PATH"
-export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
-export PATH="/snap/bin:$PATH"
+# export PATH="/mnt/c/Windows:$PATH"
+# export PATH="/mnt/c/Program Files/Docker/Docker/resources/bin:$PATH"
+# export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
+# export PATH="/snap/bin:$PATH"
 
-# Android
-export PATH=$HOME/android/cmdline-tools/12.0/bin:$PATH
-export PATH=$HOME/android/emulator:$PATH
-export PATH=$HOME/android/platform-tools:$PATH
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-# =============================================================================
+# # Android
+# export PATH=$HOME/android/cmdline-tools/12.0/bin:$PATH
+# export PATH=$HOME/android/emulator:$PATH
+# export PATH=$HOME/android/platform-tools:$PATH
 #
-# Utility functions for zoxide.
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 #
-
-# pwd based on the value of _ZO_RESOLVE_SYMLINKS.
-function __zoxide_pwd() {
-    \builtin pwd -L
-}
-
-# cd + custom logic based on the value of _ZO_ECHO.
-function __zoxide_cd() {
-    # shellcheck disable=SC2164
-    \builtin cd -- "$@"
-}
-
-# =============================================================================
-#
-# Hook configuration for zoxide.
-#
-
-# Hook to add new entries to the database.
-function __zoxide_hook() {
-    # shellcheck disable=SC2312
-    \command zoxide add -- "$(__zoxide_pwd)"
-}
-
-# Initialize hook.
-# shellcheck disable=SC2154
-if [[ ${precmd_functions[(Ie)__zoxide_hook]:-} -eq 0 ]] && [[ ${chpwd_functions[(Ie)__zoxide_hook]:-} -eq 0 ]]; then
-    chpwd_functions+=(__zoxide_hook)
-fi
-
-# =============================================================================
-#
-# When using zoxide with --no-cmd, alias these internal functions as desired.
-#
-
-# Jump to a directory using only keywords.
-function __zoxide_z() {
-    # shellcheck disable=SC2199
-    if [[ "$#" -eq 0 ]]; then
-        __zoxide_cd ~
-    elif [[ "$#" -eq 1 ]] && { [[ -d "$1" ]] || [[ "$1" = '-' ]] || [[ "$1" =~ ^[-+][0-9]$ ]]; }; then
-        __zoxide_cd "$1"
-    else
-        \builtin local result
-        # shellcheck disable=SC2312
-        result="$(\command zoxide query --exclude "$(__zoxide_pwd)" -- "$@")" && __zoxide_cd "${result}"
-    fi
-}
-
-# Jump to a directory using interactive search.
-function __zoxide_zi() {
-    \builtin local result
-    result="$(\command zoxide query --interactive -- "$@")" && __zoxide_cd "${result}"
-}
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.dotFiles/starship.toml
