@@ -17,10 +17,11 @@ return {
         html = { 'prettier' },
         css = { 'prettier' },
         yaml = { 'prettier' },
+        toml = { 'prettier' },
         graphql = { 'prettier' },
         markdown = { 'prettier' },
         --go formatters
-        go = { 'goimports', 'gofumpt', 'golines' },
+        go = { { 'gofumpt', 'gofumpt' }, 'golines' },
         blade = { 'blade-formatter', 'blade-formatter' },
         php = { 'php_cs_fixer' },
 
@@ -28,7 +29,7 @@ return {
         sql = { 'sql_formatter' },
       },
       format_on_save = {
-        timeout_ms = 2000,
+        timeout_ms = 1000,
         lsp_fallback = true,
       },
     }

@@ -3,6 +3,11 @@ local options = { silent = true, noremap = true }
 local mappings = {
   n = {
     {
+      lhs = ';',
+      rhs = ':',
+      opts = options,
+    },
+    {
       lhs = '<C-s>',
       rhs = '<ESC>:wa!<CR>',
       opts = options,

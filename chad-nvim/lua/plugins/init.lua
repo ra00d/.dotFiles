@@ -107,6 +107,7 @@ return {
   {
     "Exafunction/codeium.vim",
     event = "BufEnter",
+    enabled = false,
     config = function()
       -- Change '<C-g>' here to any keycode you like.
       vim.keymap.set("i", "jj", function()
@@ -150,7 +151,7 @@ return {
     "olexsmir/gopher.nvim",
     ft = { "go" },
     config = function()
-      require("gopher").setup()
+      require("gopher").setup {}
     end,
   },
 
@@ -158,13 +159,20 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require("nvchad.configs.lspconfig").defaults()
+      -- require("nvchad.configs.lspconfig").defaults()
       require "configs.lspconfig"
     end,
+  },
+  {
+    "b0o/schemastore.nvim",
   },
   --
   {
     "williamboman/mason.nvim",
+    dependencies = {
+
+      "williamboman/mason-lspconfig.nvim",
+    },
     opts = {
       ensure_installed = {
         "lua-language-server",
@@ -175,6 +183,8 @@ return {
       },
     },
   },
+
+  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
   --
   -- {
   -- 	"nvim-treesitter/nvim-treesitter",

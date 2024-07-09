@@ -38,6 +38,11 @@ M.ui = {
   lsp = {
     signature = false,
   },
-  -- telescope = { style = "bordered" },
+  cmp = {
+    icons = true,
+    lspkind_text = true,
+    style = "default", -- default/flat_light/flat_dark/atom/atom_colored
+  },
+  telescope = { style = "bordered" },
 }
 return M

@@ -15,6 +15,10 @@ autoload bashcompinit && bashcompinit
 autoload -Uz compinit
 compinit
 
+# SYSTEM PACKAGE MANAGER [BREW]
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export  HOMEBREW_NO_AUTO_UPDATE=1
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -93,13 +97,23 @@ bindkey '^u' autosuggest-toggle
 # bindkey '^L' vi-forward-word
 bindkey '^k' up-line-or-search
 bindkey '^j' down-line-or-search
-bindkey -e
 
 
 
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(buffer-empty bracketed-paste accept-line push-line-or-edit)
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_USE_ASYNC=true
+HISTSIZE=5000
+HISTFILE=~/.zsh_history
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
 # source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -124,10 +138,6 @@ fi
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# SYSTEM PACKAGE MANAGER [BREW]
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-export  HOMEBREW_NO_AUTO_UPDATE=1
-
 
 
 # PROGRAMING LANGUAGE RELATED CONFIGURATION
@@ -181,7 +191,7 @@ export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/opt/postgresql@16/include"
 ####################NVIM CONFIGURATION##################################
 vv() {
   # Assumes all configs exist in directories named ~/.config/*-nvim
-  local config=$(fd --max-depth 1 --glob '*-nvim' ~/.config | fzf --prompt="Neovim Configs > " --height=~50% --layout=reverse --border --exit-0)
+  local config=$(fd --max-depth 1 --glob '*nvim' ~/.config | fzf --prompt="Neovim Configs > " --height=~50% --layout=reverse --border --exit-0)
  
   # If I exit fzf without selecting a config, don't open Neovim
   [[ -z $config ]] && echo "No config selected" && return
@@ -191,6 +201,7 @@ vv() {
 # vim aliases
 export NVIM_APPNAME="chad-nvim"
 alias v="nvim ."
+alias lv="~/bin/nvim/bin/nvim ."
 alias vim="nvim ."
 alias nv="nvim ."
 # VI Mode!!!
@@ -271,9 +282,9 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 #################### PATH ####################################
 #
 
-# export PATH="/mnt/c/Windows:$PATH"
+export PATH="/mnt/c/Windows:$PATH"
 # export PATH="/mnt/c/Program Files/Docker/Docker/resources/bin:$PATH"
-# export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
+export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
 # export PATH="/snap/bin:$PATH"
 
 # # Android

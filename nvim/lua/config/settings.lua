@@ -21,7 +21,7 @@ opt.timeoutlen = 300
 opt.splitright = true
 opt.splitbelow = true
 opt.list = true
--- opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+opt.listchars = { tab = '. ', trail = '·', nbsp = '␣' }
 opt.inccommand = 'split'
 opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
@@ -39,6 +39,7 @@ opt.expandtab = false
 opt.smartindent = true
 opt.incsearch = true
 opt.clipboard = 'unnamedplus'
+vim.g.clipboard = 'unnamedplus'
 opt.conceallevel = 1
 vim.g.mustache_abbreviations = 1
 -- opt.term = 'xterm-256color'
@@ -47,18 +48,18 @@ opt.foldmethod = 'expr'
 opt.foldexpr = 'nvim_treesitter#foldexpr()'
 
 opt.foldenable = false
-vim.g.clipboard = {
-  name = 'WslClipboard',
-  copy = {
-    ['+'] = 'clip.exe',
-    ['*'] = 'clip.exe',
-  },
-  paste = {
-    ['+'] = 'pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    ['*'] = 'pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-  },
-  cache_enabled = 0,
-}
+-- vim.g.clipboard = {
+--   name = 'WslClipboard',
+--   copy = {
+--     ['+'] = 'clip.exe',
+--     ['*'] = 'clip.exe',
+--   },
+--   paste = {
+--     ['+'] = 'pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+--     ['*'] = 'pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
+--   },
+-- cache_enabled = 0,
+-- }
 -- vim.g.clipboard = {
 --   name = 'myClipboard',
 --   copy = {

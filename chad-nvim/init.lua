@@ -1,6 +1,6 @@
-vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 vim.g.mapleader = " "
-
+vim.g.maplocalleader = " "
+vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 -- vim.loop.os_uname = function()
 --   return {
 --     sysname = "Linux",
@@ -40,10 +40,12 @@ dofile(vim.g.base46_cache .. "defaults")
 dofile(vim.g.base46_cache .. "statusline")
 dofile(vim.g.base46_cache .. "nvimtree")
 require "nvchad.autocmds"
-require "mappings"
 
-vim.schedule(function()
-  -- require "mappings"
-  -- require "options"
-  require "autocmd"
-end)
+-- vim.schedule(function()
+-- require "mappings"
+-- require "options"
+require "autocmd"
+require "mappings"
+require "commands"
+-- require "configs.lspconfig"
+-- end)

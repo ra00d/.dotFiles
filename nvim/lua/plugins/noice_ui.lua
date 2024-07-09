@@ -6,13 +6,16 @@ return {
     -- add any options here
     lsp = {
       progress = {
-        enabled = true,
-        format = 'lsp_progress',
-        --- @type NoiceFormat|string
-        format_done = 'lsp_progress_done',
-        throttle = 1000 / 30, -- frequency to update lsp progress message
-        view = 'mini',
+        enabled = false,
       },
+      -- progress = {
+      --   enabled = false,
+      --   format = 'lsp_progress',
+      --   --- @type NoiceFormat|string
+      --   format_done = 'lsp_progress_done',
+      --   throttle = 1000 / 30, -- frequency to update lsp progress message
+      --   view = 'mini',
+      -- },
       -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
       override = {
         ['vim.lsp.util.convert_input_to_markdown_lines'] = true,

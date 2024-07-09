@@ -5,11 +5,11 @@ local options = {
     -- Conform will run multiple formatters sequentially
     python = { "isort", "black" },
     -- Use a sub-list to run only the first available formatter
-    javascript = { { "prettier", "biome" } },
-    typescript = { { "prettier", "biome" } },
-    javascriptreact = { { "prettier", "biome" } },
-    typescriptreact = { { "prettier", "biome" } },
-    json = { { "prettier", "biome" } },
+    javascript = { { "biome", "prettier" } },
+    typescript = { { "biome", "prettier" } },
+    javascriptreact = { { "biome", "prettier" } },
+    typescriptreact = { { "biome", "prettier" } },
+    json = { { "biome", "prettier" } },
 
     html = { "prettier" },
     css = { "prettier" },
@@ -17,7 +17,7 @@ local options = {
     graphql = { "prettier" },
     markdown = { "prettier" },
     --go formatters
-    go = { "goimports", "gofumpt", "golines" },
+    go = { { "gofumpt", "gofmt" }, "golines" },
     blade = { "blade-formatter", "blade-formatter" },
     php = { "php_cs_fixer" },
 
@@ -25,7 +25,7 @@ local options = {
     sql = { "sql_formatter" },
   },
   format_on_save = {
-    timeout_ms = 2000,
+    timeout_ms = 500,
     lsp_fallback = true,
   },
 

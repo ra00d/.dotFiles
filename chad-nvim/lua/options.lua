@@ -1,8 +1,11 @@
 require "nvchad.options"
 
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 -- add yours here!
 
 local opt = vim.o
+
 -- o.cursorlineopt ='both' -- to enable cursorline!
 opt.number = true
 opt.relativenumber = true
@@ -33,7 +36,11 @@ opt.incsearch = true
 opt.conceallevel = 1
 vim.g.mustache_abbreviations = 1
 
+vim.opt.list = true
+vim.opt.listchars = { tab = ". ", trail = "·", nbsp = "␣" }
+
 opt.cursorline = true
+
 opt.cursorlineopt = "both"
 -- opt.term = "xterm-256color"
 
@@ -42,32 +49,5 @@ opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 opt.foldenable = false
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
--- vim.fs.root = function(source, marker)
---   assert(source, "missing required argument: source")
---   assert(marker, "missing required argument: marker")
---
---   local path ---@type string
---   if type(source) == "string" then
---     path = source
---   elseif type(source) == "number" then
---     if vim.bo[source].buftype ~= "" then
---       path = assert(vim.uv.cwd())
---     else
---       path = vim.api.nvim_buf_get_name(source)
---     end
---   else
---     error 'invalid type for argument "source": expected string or buffer number'
---   end
---
---   local paths = vim.fs.find(marker, {
---     upward = true,
---     path = vim.fn.fnamemodify(path, ":p:h"),
---   })
---
---   if #paths == 0 then
---     return nil
---   end
---
---   return vim.fs.dirname(paths[1])
--- end
---
+
+vim.g.loaded_node_provider = 0

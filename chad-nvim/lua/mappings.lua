@@ -18,18 +18,18 @@ local mappings = {
       opts = options,
     },
     {
-      lhs = "<leader>e",
-      rhs = ":NvimTreeFocus<CR>",
+      lhs = "<space>e",
+      rhs = "<cmd>NvimTreeFocus<CR>",
       opts = options,
     },
     {
       lhs = "<C-b>",
-      rhs = ":NvimTreeToggle<CR>",
+      rhs = "<cmd>NvimTreeToggle<CR>",
       opts = options,
     },
     {
       lhs = "<Tab>",
-      rhs = ":bnext<CR>",
+      rhs = "<cmd>bnext<CR>",
       opts = options,
     },
     -- {
@@ -38,47 +38,81 @@ local mappings = {
     --   opts = options,
     -- },
     {
-      lhs = "<leader>x",
-      rhs = ":bd <CR>",
+      lhs = "<space>x",
+      rhs = "<cmd>bd <CR>",
       opts = options,
     },
     {
       lhs = "<S-Tab>",
-      rhs = ":bprev<CR>",
+      rhs = "<cmd>bprev<CR>",
       opts = options,
     },
     {
       lhs = "<C-q>",
-      rhs = ":xa<CR>",
+      rhs = "<cmd>xa<CR>",
       opts = options,
     },
     -- TELESCOPE MAPPINGS
     {
-      lhs = "<leader>ff",
-      rhs = ":Telescope find_files<CR>",
+      lhs = "<space>ff",
+      rhs = "<cmd>Telescope find_files<CR>",
       opts = options,
     },
     {
-      lhs = "<leader>fw",
-      rhs = ":Telescope live_grep<CR>",
+      lhs = "<space>fw",
+      rhs = "<cmd>Telescope live_grep<CR>",
       opts = options,
     },
     {
-      lhs = "<leader>fb",
-      rhs = ":Telescope buffers<CR>",
+      lhs = "<space>fb",
+      rhs = "<cmd>Telescope buffers<CR>",
       opts = options,
     },
     -- harpoon mappings
     {
-      lhs = "<leader>a",
-      rhs = ":lua require('harpoon.mark').add_file()<CR>",
+      lhs = "<space>a",
+      rhs = "<cmd>lua require('harpoon.mark').add_file()<CR>",
       opts = options,
     },
     -- DBUI MAPPINGS
     {
-      lhs = "<leader>tdb",
-      rhs = ":DBUIToggle<CR>",
+      lhs = "<space>tdb",
+      rhs = "<cmd>DBUIToggle<CR>",
       opts = options,
+    },
+    -- HOP
+    {
+      lhs = "<space>hw",
+      rhs = "<cmd>HopWord<CR>",
+      opts = {
+        desc = "jump next word",
+        silent = true,
+      },
+    },
+
+    {
+      lhs = "<space>hc",
+      rhs = "<cmd>HopChar1<CR>",
+      opts = {
+        desc = "jump  char",
+        silent = true,
+      },
+    },
+    {
+      lhs = "<space>hl",
+      rhs = "<cmd>HopLine<CR>",
+      opts = {
+        desc = "jump  line",
+        silent = true,
+      },
+    },
+    {
+      lhs = "<space>dn",
+      rhs = "<cmd>NoiceDismiss<CR>",
+      opts = {
+        silent = true,
+        desc = "Dismiss Notification messages",
+      },
     },
   },
   i = {
@@ -99,22 +133,31 @@ local mappings = {
     },
   },
 }
-
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
-
 vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_next { severity = vim.diagnostic.severity.ERROR }
-end, { desc = "Go to previous diagnostic message" })
+  vim.diagnostic.goto_prev { severity = {
+    min = "WARN",
+  } }
+end, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_prev { severity = vim.diagnostic.severity.ERROR }
+  vim.diagnostic.goto_next {
+    severity = {
+      min = "WARN",
+    },
+  }
+end, { desc = "Go to next [D]iagnostic message" })
+vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+vim.keymap.set("n", "[e", function()
+  vim.diagnostic.goto_next {
+    severity = {
+      min = "ERROR",
+    },
+  }
+end, { desc = "Go to previous diagnostic message" })
+vim.keymap.set("n", "]e", function()
+  vim.diagnostic.goto_prev { severity = { min = "ERROR" } }
 end, { desc = "Go to next diagnostic message" })
-
-vim.keymap.set("n", "[e", vim.diagnostic.goto_next, { desc = "Go to previous diagnostic message" })
-vim.keymap.set("n", "]e", vim.diagnostic.goto_prev, { desc = "Go to next diagnostic message" })
-vim.keymap.set("n", "<leader>k", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
+vim.keymap.set("n", "<space>k", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
+vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -135,7 +178,7 @@ vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- to disable changing the registers
 -- vim.keymap.set({ 'n', 'v' }, 'd', [["d]])
 -- delete without copying to clipboard
-vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<space>d", [["_d]])
 -- change without copying to clipboard
 vim.keymap.set({ "n", "v" }, "c", [["_c]])
 -- delete without copying to clipboard
@@ -143,9 +186,9 @@ vim.keymap.set({ "n", "v" }, "x", [["_x]])
 -- paste without clearing the clipboard
 vim.keymap.set({ "n", "v" }, "p", [["*p]])
 -- paste from system clipboard
-vim.keymap.set({ "n", "v" }, "<leader>p", [["0p]])
+vim.keymap.set({ "n", "v" }, "<space>p", [["0p]])
 
-vim.keymap.set({ "n", "v" }, "<leader>rc", ":silent so ~/.dotFiles/nvim/lua/init.lua<CR>", {
+vim.keymap.set({ "n", "v" }, "<space>rc", ":silent so ~/.dotFiles/nvim/lua/init.lua<CR>", {
   desc = "reload nvim configuration",
 })
 -- Function to set mappings for a given mode
@@ -166,18 +209,18 @@ local nmap = function(keys, func, desc)
     desc = "LSP: " .. desc
   end
 
-  vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
+  vim.keymap.set("n", keys, func, { desc = desc })
 end
 
-nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
+nmap("<space>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+nmap("<space>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
-nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+-- nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+-- nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+-- nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+-- nmap("<space>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+-- nmap("<space>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+-- nmap("<space>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 
 -- See `:help K` for why this keymap
 nmap("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -185,9 +228,9 @@ nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
 
 -- Lesser used LSP functionality
 nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-nmap("<leader>wa", vim.lsp.buf.add_workspace_folder, "[W]orkspace [A]dd Folder")
-nmap("<leader>wr", vim.lsp.buf.remove_workspace_folder, "[W]orkspace [R]emove Folder")
-nmap("<leader>wl", function()
+nmap("<space>wa", vim.lsp.buf.add_workspace_folder, "[W]orkspace [A]dd Folder")
+nmap("<space>wr", vim.lsp.buf.remove_workspace_folder, "[W]orkspace [R]emove Folder")
+nmap("<space>wl", function()
   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, "[W]orkspace [L]ist Folders")
 
