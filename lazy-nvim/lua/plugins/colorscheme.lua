@@ -2,12 +2,12 @@ return {
 
   "catppuccin/nvim",
   name = "catppuccin",
-  priority = 1000,
-  enabled = false,
+  priority = 100000,
+  -- enabled = false,
   lazy = false,
   config = function()
-    vim.cmd.colorscheme "catppuccin"
-    require("catppuccin").setup {
+    vim.cmd.colorscheme("catppuccin")
+    require("catppuccin").setup({
       default_integrations = true,
       integrations = {
         cmp = true,
@@ -27,15 +27,12 @@ return {
         },
         -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
       },
-    }
+    })
   end,
-  dependencies = {
-    {
-      "lukas-reineke/indent-blankline.nvim",
-      main = "ibl",
-      ---@module "ibl"
-      ---@type ibl.config
-      opts = {},
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "catppuccin",
     },
   },
 }

@@ -15,7 +15,8 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     version = "*",
-    lazy = false,
+    enabled = false,
+    -- lazy = false,
     dependencies = {
       "nvim-tree/nvim-web-devicons",
     },
@@ -77,6 +78,7 @@ return {
   {
     "tpope/vim-surround",
     lazy = false,
+    enabled = false,
     -- config = true
   },
 
@@ -130,6 +132,7 @@ return {
   {
     "tpope/vim-dadbod",
     "kristijanhusak/vim-dadbod-ui",
+    enabled = false,
     {
       "kristijanhusak/vim-dadbod-completion",
       config = function()
@@ -184,7 +187,20 @@ return {
     },
   },
 
-  { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      -- indent = { highlight = { "IblChar" }, char = "" },
+      -- whitespace = {
+      --   highlight = {
+      --     "IblChar",
+      --   },
+      --   remove_blankline_trail = false,
+      -- },
+      -- scope = { enabled = true },
+    },
+  },
   --
   -- {
   -- 	"nvim-treesitter/nvim-treesitter",

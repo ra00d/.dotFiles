@@ -4,6 +4,7 @@ return {
     local conf = require "nvchad.configs.telescope"
 
     conf.defaults.layout_config = {
+
       horizontal = {
         prompt_position = "bottom",
         preview_width = 0.55,
@@ -19,6 +20,12 @@ return {
     -- or
     -- table.insert(conf.defaults.mappings.i, your table)
 
+    conf.defaults.mappings = {
+      n = {
+        ["d"] = require("telescope.actions").delete_buffer,
+        ["q"] = require("telescope.actions").close,
+      },
+    }
     return conf
   end,
 }

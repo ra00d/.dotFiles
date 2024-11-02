@@ -3,6 +3,7 @@ return {
   "folke/noice.nvim",
   event = "VeryLazy",
   lazy = false,
+  enabled = false,
   opts = {
     -- add any options here
     lsp = {
@@ -10,6 +11,9 @@ return {
         enabled = false,
       },
       hover = {
+        enabled = false,
+      },
+      signature = {
         enabled = false,
       },
       -- enabled = false,
@@ -54,13 +58,6 @@ return {
       filter = {
         event = "msg_show",
         find = "created",
-      },
-      opts = { skip = true },
-    },
-    {
-      filter = {
-        event = "msg_show",
-        find = "timeout",
       },
       opts = { skip = true },
     },

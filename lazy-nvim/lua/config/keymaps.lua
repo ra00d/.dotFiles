@@ -1,6 +1,6 @@
-require "nvchad.mappings"
-
--- add yours here
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
 
 local map = vim.keymap.set
 
@@ -132,7 +132,7 @@ local mappings = {
     {
       lhs = "<C-x>",
       rhs = function()
-        local ls = require "luasnip"
+        local ls = require("luasnip")
         if ls.expand_or_jumpable() then
           ls.expand_or_jump()
         end
@@ -142,27 +142,27 @@ local mappings = {
 }
 
 vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_prev { severity = {
+  vim.diagnostic.goto_prev({ severity = {
     min = "WARN",
-  } }
+  } })
 end, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next {
+  vim.diagnostic.goto_next({
     severity = {
       min = "WARN",
     },
-  }
+  })
 end, { desc = "Go to next [D]iagnostic message" })
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "[e", function()
-  vim.diagnostic.goto_next {
+  vim.diagnostic.goto_next({
     severity = {
       min = "ERROR",
     },
-  }
+  })
 end, { desc = "Go to previous diagnostic message" })
 vim.keymap.set("n", "]e", function()
-  vim.diagnostic.goto_prev { severity = { min = "ERROR" } }
+  vim.diagnostic.goto_prev({ severity = { min = "ERROR" } })
 end, { desc = "Go to next diagnostic message" })
 vim.keymap.set("n", "<space>k", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
@@ -197,9 +197,9 @@ map({ "n", "v" }, "p", [["0p]])
 -- paste from system clipboard
 vim.keymap.set({ "n", "v" }, "<space>p", [["*p]])
 
-vim.keymap.set({ "n", "v" }, "<space>rc", ":silent so ~/.dotFiles/nvim/lua/init.lua<CR>", {
-  desc = "reload nvim configuration",
-})
+-- vim.keymap.set({ "n", "v" }, "<space>rc", ":silent so ~/.dotFiles/nvim/lua/init.lua<CR>", {
+--   desc = "reload nvim configuration",
+-- })
 -- Function to set mappings for a given mode
 local function set_mode_mappings(mode, mode_mappings)
   for _, mapping in ipairs(mode_mappings) do

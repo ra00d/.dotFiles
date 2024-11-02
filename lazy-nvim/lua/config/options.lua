@@ -1,8 +1,6 @@
-require "nvchad.options"
-
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
--- add yours here!
+-- Options are automatically loaded before lazy.nvim startup
+-- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+-- Add any additional options here
 
 local opt = vim.o
 
@@ -36,33 +34,23 @@ opt.incsearch = true
 opt.conceallevel = 1
 vim.g.mustache_abbreviations = 1
 
-opt.cmdheight = 0
+-- opt.cmdheight = 0
 
-vim.opt.list = true
-vim.opt.listchars = { tab = ". ", trail = "·", nbsp = "␣" }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = ". ", trail = "·", nbsp = "␣" }
 
 opt.cursorline = true
 opt.cursorlineopt = "both"
 -- opt.term = "xterm-256color"
 
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+-- opt.foldmethod = "expr"
+-- opt.foldexpr = "nvim_treesitter#foldexpr()"
 
-opt.foldenable = false
+-- opt.foldenable = false
 
 -- vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
-vim.g.loaded_node_provider = 0
-
-vim.g.clipboard = {
-  name = "WslClipboard",
-  copy = {
-    ["+"] = "clip.exe",
-    ["*"] = "clip.exe",
-  },
-  paste = {
-    ["+"] = 'pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-    ["*"] = 'pwsh.exe -c [Console]::Out.Write($(Get-Clipboard -Raw).tostring().replace("`r", ""))',
-  },
-  cache_enabled = 0,
-}
+-- vim.g.loaded_node_provider = 0
+-- Enable the option to require a Prettier config file
+-- If no prettier config file is found, the formatter will not be used
+vim.g.lazyvim_prettier_needs_config = false

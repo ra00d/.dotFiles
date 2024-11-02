@@ -1,9 +1,10 @@
 -- EXAMPLE
--- local on_attach_nvchad = require("nvchad.configs.lspconfig").on_attach
+local on_attach_nvchad = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
 local on_attach = function(client, bufnr)
+  on_attach_nvchad(client, bufnr)
   local nmap = function(keys, func, desc)
     if desc then
       desc = "LSP: " .. desc
@@ -17,8 +18,8 @@ local on_attach = function(client, bufnr)
 
   nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
   nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-  nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-  nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
+  -- nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+  -- nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
   nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
   nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 
@@ -44,7 +45,7 @@ local on_attach = function(client, bufnr)
   -- on_attach_nvchad(client, bufnr)
 end
 local lspconfig = require "lspconfig"
-local servers = { "lua_ls", "html", "cssls", "tsserver", "tailwindcss" }
+local servers = { "lua_ls", "cssls", "tailwindcss", "emmet_language_server", "astro" }
 
 -- lsps with default config
 for _, lsp in ipairs(servers) do
@@ -62,7 +63,7 @@ lspconfig.lua_ls.setup {
 }
 lspconfig.gopls.setup {
   on_attach = on_attach,
-  -- on_init = on_init,
+  on_init = on_init,
   capabilities = capabilities,
   -- cmd = "gopls",
   settings = {
@@ -70,7 +71,7 @@ lspconfig.gopls.setup {
     gopls = {
 
       completeUnimported = true,
-      -- usePlaceholders = true,
+      usePlaceholders = true,
       analyses = {
         unusedparams = true,
       },
@@ -80,7 +81,102 @@ lspconfig.gopls.setup {
   },
 }
 -- typescript
-lspconfig.tsserver.setup {
+
+local function organize_imports()
+  local params = {
+    command = "_typescript.organizeImports",
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = "",
+  }
+  vim.lsp.buf.execute_command(params)
+  params = {
+    command = "_typescript.removeUnusedImports",
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = "",
+  }
+  vim.lsp.buf.execute_command(params)
+  params = {
+    command = "_typescript.addMissingImports",
+    arguments = { vim.api.nvim_buf_get_name(0) },
+    title = "",
+  }
+  vim.lsp.buf.execute_command(params)
+end
+lspconfig.ts_ls.setup {
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+  init_options = {
+    -- codeActionsOnSave = {
+    --   removeUnusedImports = true
+    -- },
+    preferences = {
+      completeFunctionsCall = false,
+      -- includeInlayParameterNameHints = "all",
+      -- includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      -- includeInlayFunctionParameterTypeHints = true,
+      -- includeInlayVariableTypeHints = false,
+      -- includeInlayPropertyDeclarationTypeHints = true,
+      -- includeInlayFunctionLikeReturnTypeHints = true,
+      -- includeInlayEnumMemberValueHints = true,
+      -- importModuleSpecifierPreference = 'non-relative'
+    },
+  },
+  commands = {
+    OrganizeImports = {
+      organize_imports,
+      description = "Organize Imports",
+    },
+  },
+}
+-- lspconfig.vtsls.setup {
+--   on_attach = on_attach,
+--   on_init = on_init,
+--   capabilities = capabilities,
+-- }
+lspconfig.html.setup {
+  filetypes = {
+    "html",
+    "css",
+    "scss",
+    "javascriptreact",
+    "typescriptreact",
+    "hbs",
+    "handlebars",
+    "vue",
+  },
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+}
+lspconfig.emmet_language_server.setup {
+  filetypes = {
+    "html",
+    "javascriptreact",
+    "typescriptreact",
+    "hbs",
+    "handlebars",
+    "vue",
+  },
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+}
+require("lspconfig").jsonls.setup {
+  on_attach = on_attach,
+  on_init = on_init,
+  capabilities = capabilities,
+  settings = {
+    json = {
+      schemas = require("schemastore").json.schemas(),
+      validate = { enable = true },
+      schemaDownload = {
+        enable = true,
+      },
+    },
+  },
+}
+require("lspconfig").astro.setup {
   on_attach = on_attach,
   on_init = on_init,
   capabilities = capabilities,

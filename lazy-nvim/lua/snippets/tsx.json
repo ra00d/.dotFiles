@@ -1,0 +1,49 @@
+{
+  "reactDefaultFunctionComponent": {
+    "prefix": "rcd",
+    "body": "import React from 'react';\n\n type Props={};\n\n const ${1:$TM_FILENAME_BASE} = (props:Props) => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t);\n}\nexport default ${1};",
+    "description": "Creates a React functional component with PropTypes"
+  },
+
+  "reactFunctionComponentWithProps": {
+    "prefix": "rct",
+    "body": "import React from 'react';\n\n type Props={};\n\nexport const ${1:$TM_FILENAME_BASE} = (props:Props) => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t)\n}",
+    "description": "Creates a React functional component with PropTypes"
+  },
+  "reactFunctionComponent": {
+    "prefix": "rcg",
+    "body": "import React from 'react';\n\nexport const ${1:$TM_FILENAME_BASE} = () => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t)\n}",
+    "description": "Creates a React functional component without PropTypes"
+  },
+  "reactComponent": {
+    "prefix": "rcc",
+    "body": "\nexport const ${1:$TM_FILENAME_BASE} = () => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t)\n}",
+    "description": "Creates a React functional component without PropTypes"
+  },
+  "useState": {
+    "prefix": "uss",
+    "body": "const [${1:state}, set${1/(.*)/${1:/TM_capitalize}/}] = useState(${2:initValue})$0",
+    "description": "React useState() hook"
+  },
+  "form field": {
+    "prefix": "ff",
+    "body": "<FormField\n\t\tname='${1:name}'\n\t\tcontrol={form.control}\nrender={({field})=>{\n\t\treturn <FormItem>\n\t\t<FormLabel>${1:/TM_capitalize}</FormLabel>\n\t\t<FormControl>\n\t\t<Input {...field} />\n</FormControl>\n<FormMessage/>\n\t\t</FormItem>\n}}/>",
+    "description": "Form field with shadcn-ui"
+  },
+
+  "createType": {
+    "prefix": "tp",
+    "body": "export type T${1:Type}=${0:{}}",
+    "description": "create a typeScript type"
+  },
+  "createAsyncArrawFunc": {
+    "prefix": "asfa",
+    "body": "async (${1})=>{\n${0}}",
+    "description": "Create async arraw function"
+  },
+  "createAsyncFunc": {
+    "prefix": "asf",
+    "body": "async ${1,func}(${2})=>{\n${0}}",
+    "description": "Create async  function"
+  }
+}

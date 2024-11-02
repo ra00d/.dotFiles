@@ -6,7 +6,7 @@
 # fi
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+# echo "9"
 # Path to your oh-my-zsh installation.
 # export ZSH="$HOME/.oh-my-zsh"
 setopt prompt_subst
@@ -15,9 +15,11 @@ autoload bashcompinit && bashcompinit
 autoload -Uz compinit
 compinit
 
+# echo "17"
 # SYSTEM PACKAGE MANAGER [BREW]
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 export  HOMEBREW_NO_AUTO_UPDATE=1
+# export PATH=/home/linuxbrew/.linuxbrew/Cellar/caddy/2.8.1/bin:$PATH
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -40,7 +42,7 @@ CASE_SENSITIVE="true"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
+zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
@@ -63,7 +65,7 @@ CASE_SENSITIVE="true"
 # You can also set it to another string to have that shown instead of the default red dots.
 # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -86,6 +88,8 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
+# source $ZSH/oh-my-zsh.sh
+
 # plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
 source $HOME/.dotFiles/zsh-plugins/git.zsh
 source $HOME/.dotFiles/zsh-plugins/vi-mode.zsh
@@ -93,8 +97,8 @@ source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 bindkey '^w' autosuggest-execute
 bindkey '^e' autosuggest-accept
-bindkey '^u' autosuggest-toggle
-# bindkey '^L' vi-forward-word
+# bindkey '^u' autosuggest-toggle
+bindkey '^a' vi-forward-word
 bindkey '^k' up-line-or-search
 bindkey '^j' down-line-or-search
 
@@ -115,7 +119,7 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 # source $ZSH/oh-my-zsh.sh
-
+# echo "122"
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -148,10 +152,10 @@ fi
 #                                                            #
 ## gems path evry gem should be installed using the --user-install
 # alias for that 
-alias gem_install='gem install --user-install'
-if which ruby >/dev/null && which gem >/dev/null; then
-    PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-fi
+# alias gem_install='gem install --user-install'
+# if which ruby >/dev/null && which gem >/dev/null; then
+#     PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+# fi
 
 
 #################### GOLANG ####################################
@@ -179,9 +183,10 @@ alias ta='tmux -2 attach'
 
 
 #################### FZF ####################################
+#
 source <(fzf --zsh)
 
-
+# echo "189 fzf"
 
 #################### DATABASE RELATED CONFIGURATION ##################
 # POSTGRESQL CONFIG
@@ -200,18 +205,20 @@ vv() {
 }
 # vim aliases
 export NVIM_APPNAME="chad-nvim"
-alias v="nvim ."
+alias v="nvim ./"
 alias lv="~/bin/nvim/bin/nvim ."
 alias vim="nvim ."
 alias nv="nvim ."
 # VI Mode!!!
 bindkey jj vi-cmd-mode
-alias obsidian="~/bin/obsidian"
+# echo "214"
+# alias obsidian="~/bin/obsidian"
 #################### ALIASES ####################################
 #                                                               #
 # aliases 
 alias ls="eza -l --icons --git -a"
 alias lst="eza --tree --level=2 --long --icons --git"
+alias zls="clear"
 # alias cd=z
 alias j=z
 alias l=ls
@@ -243,9 +250,9 @@ alias nn="nest new"
 alias ng="nest generate"
 alias n="nest"
 # INSTALL ALL DEPENDENCIES
-alias nest-set="pnpm add @nestjs/config @nestjs/typeorm typeorm mysql2 class-validator class-transformer @nestjs/serve-static @nestjs/passport passport passport-local express-session cookie-parser helmet"
+alias nest-set="pnpm add @nestjs/config @nestjs/typeorm typeorm mysql2 class-validator class-transformer @nestjs/serve-static @nestjs/passport passport passport-local express-session cookie-parser helmet bcrypt connect-typeorm  typeorm-extension"
 # INSTALL ALL DEV DEPENDENCIES
-alias nest-set-dev="pnpm add -D @types/cookie-parser @types/express-session @types/passport-local @types/multer"
+alias nest-set-dev="pnpm add -D @types/cookie-parser @types/express-session @types/passport-local @types/multer @types/bcrypt"
 
 # php artisan
 alias art="php artisan"
@@ -281,12 +288,15 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 #################### PATH ####################################
 #
-
+# echo "291"
 export PATH="/mnt/c/Windows:$PATH"
+export PATH="/mnt/c/Windows/System32:$PATH"
+export PATH="/mnt/c/Program Files/PowerShell/7:$PATH"
 # export PATH="/mnt/c/Program Files/Docker/Docker/resources/bin:$PATH"
 export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
 # export PATH="/snap/bin:$PATH"
 
+# echo "299"
 # # Android
 # export PATH=$HOME/android/cmdline-tools/12.0/bin:$PATH
 # export PATH=$HOME/android/emulator:$PATH
@@ -296,6 +306,14 @@ export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 # [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 #
+export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"  
+  # This loads nvm bash_completion
+
+# echo "313"
 eval "$(zoxide init zsh)"
+# echo "316"
 eval "$(starship init zsh)"
 export STARSHIP_CONFIG=~/.dotFiles/starship.toml
+# echo "319"

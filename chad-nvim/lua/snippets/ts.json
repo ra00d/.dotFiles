@@ -1,0 +1,37 @@
+{
+  "createZustandStore": {
+    "prefix": "zst",
+    "body": "import { create } from 'zustand'\ntype ${1:Store} = {\ncount: number\ninc: () => void\n}\nconst ${0:useStore}= create<${1}>()((set) => ({\ncount: 1,\ninc: () => set((state) => ({ count: state.count + 1 })),\n }))",
+    "description": "Create a zustand store"
+  },
+  "createType": {
+    "prefix": "tp",
+    "body": "export type T${1:Type}=${0:{}}",
+    "description": "create a typeScript type"
+  },
+  "createConstructor": {
+    "prefix": "cst",
+    "body": "constructor(${0}){}",
+    "description": "create constructor for nestjs class"
+  },
+  "createAsyncArrawFunc": {
+    "prefix": "asaf",
+    "body": "async (${1})=>{\n${0}}",
+    "description": "Create async arraw function"
+  },
+  "createAsyncFunc": {
+    "prefix": "asf",
+    "body": "async ${1:func}(${2}){\n${0}}",
+    "description": "Create async  function"
+  },
+  "createTypeormEntity": {
+    "prefix": "entity",
+    "body": "import {Entity,Column} from \"typeorm\";\n\n @Entity()\n export class ${1:EntityName}{${0}}",
+    "description": "create typeorm entity"
+  },
+  "createPrivateProperty": {
+    "prefix": "prp",
+    "body": "private readonly ${1}:${0}",
+    "description": "create private property"
+  }
+}

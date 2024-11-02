@@ -1,0 +1,12 @@
+{
+	"name": "my-snippets",
+	"engines": {
+		"vscode": "^1.11.0"
+	},
+	"contributes": {
+		"snippets": [
+			{ "language": "typescriptreact", "path": "./tsx.json" },
+			{ "language": "typescript", "path": "./ts.json" }
+		]
+	}
+}

@@ -17,7 +17,13 @@ return {
     -- print(opts)
     local cmp = require "cmp"
     local luasnip = require "luasnip"
-
+    local loaders = require "luasnip.loaders.from_vscode"
+    loaders.load {
+      paths = {
+        vim.fn.stdpath "config" .. "/lua/snippets",
+        "~/.local/share/chad-nvim/lazy/friendly-snippets",
+      },
+    }
     opts.mapping = cmp.mapping.preset.insert {
       ["<C-n>"] = cmp.mapping.select_next_item(),
       ["<C-p>"] = cmp.mapping.select_prev_item(),
