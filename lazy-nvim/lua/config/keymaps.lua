@@ -1,8 +1,45 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
+local function opts(desc)
+  return { buffer = 0, desc = "LSP " .. desc }
+end
 
 local map = vim.keymap.set
+map("n", "<C-q>", "<cmd> wq <CR>", { desc = "Quit vim" })
+map("n", "<C-e>", function()
+  require("snacks").explorer.open({
+    auto_close = true,
+    -- focus = true,
+    jump = {
+      close = true,
+    },
+    hidden = true,
+    ignored = true,
+  })
+end, {
+  desc = "Toggle file tree",
+})
+map("n", "<leader>e", function()
+  require("snacks").explorer.open({
+    auto_close = true,
+    -- focus = true,
+    jump = {
+      close = true,
+    },
+    hidden = true,
+    ignored = true,
+    env = { ".env" },
+  })
+end, { desc = "Focus file tree" })
+
+map("n", "<space>x", "<cmd>bd<CR>", {
+  desc = "Close current buffer",
+})
+
+map("n", ";", ":", {
+  desc = "Enter command mode",
+})
 
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
@@ -13,11 +50,16 @@ local options = { silent = true }
 local mappings = {
   n = {
     { lhs = "<C-s>", rhs = "<ESC>:silent w!<CR>", opts = { silent = true, desc = "save file" } },
-    {
-      lhs = "<space>e",
-      rhs = "<cmd>Oil --float<CR>",
-      opts = options,
-    },
+    -- {
+    --   lhs = "<space>e",
+    --   rhs = function()
+    --     local oil = require("oil")
+    --     oil.toggle_float()
+    --     -- local MiniFiles = require('mini.files')
+    --     -- MiniFiles.open(vim.fn.expand("%p"))
+    --   end,
+    --   opts = options,
+    -- },
     -- {
     --   lhs = "<C-b>",
     --   rhs = "<cmd>NvimTreeToggle<CR>",
@@ -26,6 +68,24 @@ local mappings = {
     {
       lhs = "<Tab>",
       rhs = "<cmd>bnext<CR>",
+      opts = options,
+    },
+    -- GIT MAPPINGS
+    {
+      lhs = "bl",
+      rhs = ":Gitsigns toggle_current_line_blame<CR>",
+      opts = options,
+    },
+    -- jump to next hunk
+    {
+      lhs = "[n",
+      rhs = ":Gitsigns next_hunk<CR>",
+      opts = options,
+    },
+    -- jump to previous hunk
+    {
+      lhs = "[p",
+      rhs = ":Gitsigns prev_hunk<CR>",
       opts = options,
     },
     -- {
@@ -51,7 +111,12 @@ local mappings = {
     -- TELESCOPE MAPPINGS
     {
       lhs = "<space>ff",
-      rhs = "<cmd>Telescope find_files<CR>",
+      rhs = "<cmd>Telescope files<CR>",
+      opts = options,
+    },
+    {
+      lhs = "<C-p>",
+      rhs = "<cmd>Telescope files<CR>",
       opts = options,
     },
     {
@@ -123,7 +188,7 @@ local mappings = {
     },
   },
   i = {
-    { lhs = "<C-s>", rhs = "<ESC>:silent w!<CR>", opts = { silent = true, desc = "save file" } },
+    { lhs = "<C-s>", rhs = "<ESC>:silent w!<CR><ESC>", opts = { silent = true, desc = "save file" } },
     {
       lhs = "<C-q>",
       rhs = ":qa<CR>",
@@ -138,110 +203,101 @@ local mappings = {
         end
       end,
     },
+    {
+      lhs = "<Tab>",
+      rhs = function()
+        local cmp = require("blink-cmp")
+        return cmp.is_menu_visible() and cmp.select_next({}) or "<Tab>"
+      end,
+      opts = {
+        expr = true,
+      },
+    },
+    {
+      lhs = "<S-Tab>",
+      rhs = function()
+        local cmp = require("blink-cmp")
+        return cmp.is_menu_visible() and cmp.select_prev({}) or "<S-Tab>"
+      end,
+      opts = {
+        expr = true,
+      },
+    },
   },
 }
 
 vim.keymap.set("n", "[d", function()
-  vim.diagnostic.goto_prev({ severity = {
-    min = "WARN",
+  vim.diagnostic.get_prev({ severity = {
+    min = vim.diagnostic.severity.HINT,
   } })
 end, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", function()
-  vim.diagnostic.goto_next({
+  vim.diagnostic.get_next({
     severity = {
-      min = "WARN",
+      min = vim.diagnostic.severity.HINT,
     },
   })
 end, { desc = "Go to next [D]iagnostic message" })
-vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("n", "[e", function()
-  vim.diagnostic.goto_next({
+  vim.diagnostic.get_next({
     severity = {
-      min = "ERROR",
+
+      min = vim.diagnostic.severity.ERROR,
     },
   })
 end, { desc = "Go to previous diagnostic message" })
 vim.keymap.set("n", "]e", function()
-  vim.diagnostic.goto_prev({ severity = { min = "ERROR" } })
+  vim.diagnostic.get_prev({ severity = { min = vim.diagnostic.severity.ERROR } })
 end, { desc = "Go to next diagnostic message" })
 vim.keymap.set("n", "<space>k", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
-vim.keymap.set("n", "<space>q", vim.diagnostic.setloclist, { desc = "Open diagnostics list" })
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
-
--- Remap for dealing with word wrap
-vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set("n", "gh", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
 -- to disable changing the registers
-vim.keymap.set({ "n", "v" }, "d", [["0d]])
+-- vim.keymap.set({ "n", "v" }, "d", [["0d]], { noremap = true })
 -- delete without copying to clipboard
-map({ "n", "v" }, "<space>d", [["_d]])
+vim.keymap.set({ "n", "v" }, "<space>d", [["_d]], { noremap = true })
 -- change without copying to clipboard
-map({ "n", "v" }, "c", [["_c]])
+vim.keymap.set({ "n", "v" }, "c", [["_c]], { noremap = true })
+-- map({ "n", "v" }, "ciw", [["_ciw]])
 -- delete without copying to clipboard
 map({ "n", "v" }, "x", [["_x]])
--- paste without clearing the clipboard
-map({ "n", "v" }, "p", [["0p]])
-
--- paste from system clipboard
-vim.keymap.set({ "n", "v" }, "<space>p", [["*p]])
-
--- vim.keymap.set({ "n", "v" }, "<space>rc", ":silent so ~/.dotFiles/nvim/lua/init.lua<CR>", {
---   desc = "reload nvim configuration",
--- })
 -- Function to set mappings for a given mode
 local function set_mode_mappings(mode, mode_mappings)
   for _, mapping in ipairs(mode_mappings) do
     vim.keymap.set(mode, mapping.lhs, mapping.rhs, mapping.opts or {})
   end
 end
-
 -- Example of setting mappings for different modes
 local function setup_mappings()
   for mode, mode_mappings in pairs(mappings) do
     set_mode_mappings(mode, mode_mappings)
   end
 end
-local nmap = function(keys, func, desc)
-  if desc then
-    desc = "LSP: " .. desc
-  end
 
-  vim.keymap.set("n", keys, func, { desc = desc })
-end
-
-nmap("<space>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-nmap("<space>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-
--- nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
--- nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
--- nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
--- nmap("<space>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
--- nmap("<space>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
--- nmap("<space>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+-- local nmap = function(keys, func, desc)
+-- 	if desc then
+-- 		desc = "LSP: " .. desc
+-- 	end
+--
+-- 	vim.keymap.set("n", keys, func, { desc = desc })
+-- end
 
 -- See `:help K` for why this keymap
-nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
+-- nmap("K", vim.lsp.buf.hover, "Hover Documentation")
 
 -- Lesser used LSP functionality
-nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-nmap("<space>wa", vim.lsp.buf.add_workspace_folder, "[W]orkspace [A]dd Folder")
-nmap("<space>wr", vim.lsp.buf.remove_workspace_folder, "[W]orkspace [R]emove Folder")
-nmap("<space>wl", function()
-  print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-end, "[W]orkspace [L]ist Folders")
-
 -- Call the setup function to load the mappings
 setup_mappings()
+vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
+vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
+vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+
+map("n", "gd", require("telescope.builtin").lsp_definitions, opts("[G]oto [D]efinition"))
+map("n", "gr", require("telescope.builtin").lsp_references, opts("[G]oto [R]eferences"))
+map("n", "gI", require("telescope.builtin").lsp_implementations, opts("[G]oto [I]mplementation"))
+map("n", "<space>D", require("telescope.builtin").lsp_type_definitions, opts("Type [D]efinition"))
+map("n", "<space>ds", require("telescope.builtin").lsp_document_symbols, opts("[D]ocument [S]ymbols"))
+map("n", "<space>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts("[W]orkspace [S]ymbols"))
+
+map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))

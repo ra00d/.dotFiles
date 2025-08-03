@@ -6,9 +6,10 @@
 # fi
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+source ~/.local_env_vars.zsh
 # echo "9"
 # Path to your oh-my-zsh installation.
-# export ZSH="$HOME/.oh-my-zsh"
+export ZSH="/usr/share/zsh"
 setopt prompt_subst
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 autoload bashcompinit && bashcompinit
@@ -17,8 +18,8 @@ compinit
 
 # echo "17"
 # SYSTEM PACKAGE MANAGER [BREW]
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-export  HOMEBREW_NO_AUTO_UPDATE=1
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# export  HOMEBREW_NO_AUTO_UPDATE=1
 # export PATH=/home/linuxbrew/.linuxbrew/Cellar/caddy/2.8.1/bin:$PATH
 
 # Set name of the theme to load --- if set to "random", it will
@@ -59,7 +60,7 @@ zstyle ':omz:update' mode disabled  # disable automatic updates
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
@@ -90,14 +91,14 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Add wisely, as too many plugins slow down shell startup.
 # source $ZSH/oh-my-zsh.sh
 
-# plugins=(git zsh-autosuggestions zsh-syntax-highlighting vi-mode)
+plugins=( zsh-autosuggestions zsh-syntax-highlighting )
 source $HOME/.dotFiles/zsh-plugins/git.zsh
 source $HOME/.dotFiles/zsh-plugins/vi-mode.zsh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
 bindkey '^w' autosuggest-execute
 bindkey '^e' autosuggest-accept
-# bindkey '^u' autosuggest-toggle
 bindkey '^a' vi-forward-word
 bindkey '^k' up-line-or-search
 bindkey '^j' down-line-or-search
@@ -111,6 +112,7 @@ HISTSIZE=5000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
+
 setopt appendhistory
 setopt sharehistory
 setopt hist_ignore_space
@@ -118,14 +120,10 @@ setopt hist_ignore_all_dups
 setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
-# source $ZSH/oh-my-zsh.sh
-# echo "122"
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL="en_US.UTF-8"
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -157,43 +155,53 @@ fi
 #     PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 # fi
 
-
-#################### GOLANG ####################################
-#                                                            #
-#
-export PATH="$HOME/go/bin:$PATH"
-# export PATH=$PATH:$(go env GOROOT)/misc/wasm
-# export GOROOT="$HOME/go"
 ############### TOOLS AND TERMINAL  RELATED CONFIGURATION ####
 #################### TMUX ####################################
 #                                                            #
 # TMUX CONFIG
-export TMUX_CONF=~/.dotFiles/tmux/tmux.conf
+# export TMUX_CONF=~/.dotFiles/tmux/tmux.conf
 export TERM="xterm-256color"
 # alias tmux='tmux -2'
 alias ts='tmux -2 new-session -s ${PWD##*/}'
-set -g default-terminal "xterm"
+# set -g default-terminal "xterm"
 alias ta='tmux -2 attach'
-# export TMUX_CONF_LOCAL=~/.dotFiles/tmux
-#
-#################### AUTOJUMP ####################################
-#                                                            #
-# AUTOJUMP CONFIG
- # [ -f /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh ] && . /home/linuxbrew/.linuxbrew/etc/profile.d/autojump.sh
-
 
 #################### FZF ####################################
 #
 source <(fzf --zsh)
+# Open in tmux popup if on tmux, otherwise use --height mode
+# export FZF_DEFAULT_OPTS='--height 40% --tmux bottom,40% --layout reverse --border top'
+export FZF_DEFAULT_OPTS=$FZF_DEFAULT_OPTS'
+  --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 
+  --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC 
+  --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 
+  --color=selected-bg:#45475A 
+  --color=border:#6C7086,label:#CDD6F4
+  --border="rounded" --border-label="" --preview-window="border-rounded" --prompt="=> "
+  --marker="> " --pointer="◆" --separator="─" --scrollbar="│"
+  --info="right"'
 
-# echo "189 fzf"
+gch() {
+  local branch
+  branch=$(git branch --all | grep -v HEAD | sed 's/remotes\/origin\///' | sort -u | fzf --prompt="Checkout or create branch: " --print-query | tail -1 | awk '{$1=$1};1')
 
-#################### DATABASE RELATED CONFIGURATION ##################
-# POSTGRESQL CONFIG
-export PATH="/home/linuxbrew/.linuxbrew/opt/postgresql@16/bin:$PATH"
-export LDFLAGS="-L/home/linuxbrew/.linuxbrew/opt/postgresql@16/lib"
-export CPPFLAGS="-I/home/linuxbrew/.linuxbrew/opt/postgresql@16/include"
+  if [[ -n $branch ]]; then
+    if git show-ref --verify --quiet "refs/heads/$branch"; then
+      git checkout "$branch"
+    else
+      echo "Branch '$branch' does not exist. Creating it..."
+      git checkout -b "$branch"
+    fi
+  else
+    echo "No branch selected."
+  fi
+}
+
+
+
+
 ####################NVIM CONFIGURATION##################################
+# select neovim config
 vv() {
   # Assumes all configs exist in directories named ~/.config/*-nvim
   local config=$(fd --max-depth 1 --glob '*nvim' ~/.config | fzf --prompt="Neovim Configs > " --height=~50% --layout=reverse --border --exit-0)
@@ -204,26 +212,24 @@ vv() {
   NVIM_APPNAME=$(basename $config) nvim
 }
 # vim aliases
-export NVIM_APPNAME="chad-nvim"
-alias v="nvim ./"
+export NVIM_APPNAME="lazy-nvim"
+alias v="nvim "
 alias lv="~/bin/nvim/bin/nvim ."
-alias vim="nvim ."
-alias nv="nvim ."
+alias vim="nvim "
+alias nv="nvim "
 # VI Mode!!!
 bindkey jj vi-cmd-mode
-# echo "214"
-# alias obsidian="~/bin/obsidian"
+
 #################### ALIASES ####################################
 #                                                               #
-# aliases 
+# aliases for ls
 alias ls="eza -l --icons --git -a"
 alias lst="eza --tree --level=2 --long --icons --git"
+alias l=ls
+alias lt=lst
 alias zls="clear"
 # alias cd=z
 alias j=z
-alias l=ls
-alias lt=lst
-
 alias zs="source ~/.zshrc"
 alias zc="nvim ~/.zshrc"
 # copy and move with confirmation
@@ -242,13 +248,22 @@ alias msq="mysql -u root"
 
 #git
 alias g="git"
+
 alias gs="git status"
+
 alias gP="git pull"
+
+alias gu="git pull"
+
+alias gpl='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+
 
 # @nestjs/cli
 alias nn="nest new"
 alias ng="nest generate"
+alias ns="pnpm start:dev"
 alias n="nest"
+
 # INSTALL ALL DEPENDENCIES
 alias nest-set="pnpm add @nestjs/config @nestjs/typeorm typeorm mysql2 class-validator class-transformer @nestjs/serve-static @nestjs/passport passport passport-local express-session cookie-parser helmet bcrypt connect-typeorm  typeorm-extension"
 # INSTALL ALL DEV DEPENDENCIES
@@ -270,50 +285,77 @@ alias p=pnpm
 alias pdev="pnpm dev"
 
 # pnpm end
+# Kubernetes aliases
+alias kctl=kubectl
+alias k=kubectl
+alias mk=kubectl
 
-# Load Angular CLI autocompletion.
-# source <(ng completion script)
+#################### PATH ####################################
 
-# bun completions
-# [ -s "/home/ra0_0d/.bun/_bun" ] && source "/home/ra0_0d/.bun/_bun"
+# dotnet
+export PATH=~/.dotnet/tools:$PATH
+# php
+export PATH=~/.config/composer/vendor/bin:$PATH
+
+# docker
+export PATH=/usr/lib/docker/cli-plugins:$PATH
+
+# android
+export ANDROID_HOME=$HOME/.android
+export ANDROID_SDK_ROOT=$ANDROID_HOME
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# bun
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+#GO
+export PATH=$PATH:$(go env GOPATH)/bin
+
+################### MISC ####################################
+eval "$(zoxide init zsh)"
+
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG=~/.dotFiles/starship.toml
+
+################## NODEJS & JAVASCRIPT #######################
+# nvm path
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+
+load-nvmrc() {
+  local nvmrc_path
+  nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version
+    nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$(nvm version)" ]; then
+      nvm use --silent
+    fi
+  elif [ -n "$(PWD=$OLDPWD nvm_find_nvmrc)" ] && [ "$(nvm version)" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default --silent
+  fi
+}
+
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+# source pnpm completion
+source ~/pnpm-completion.zsh
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+# alias php='php-legacy'
 
-#################### PATH ####################################
-#
-# echo "291"
-export PATH="/mnt/c/Windows:$PATH"
-export PATH="/mnt/c/Windows/System32:$PATH"
-export PATH="/mnt/c/Program Files/PowerShell/7:$PATH"
-# export PATH="/mnt/c/Program Files/Docker/Docker/resources/bin:$PATH"
-export PATH="/mnt/c/Users/WD/AppData/Local/Programs/Microsoft VS Code/bin:$PATH"
-# export PATH="/snap/bin:$PATH"
+export PATH="/mnt/main/ra0_0d/AppImages:$PATH"
 
-# echo "299"
-# # Android
-# export PATH=$HOME/android/cmdline-tools/12.0/bin:$PATH
-# export PATH=$HOME/android/emulator:$PATH
-# export PATH=$HOME/android/platform-tools:$PATH
-#
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-#
-export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/home/linuxbrew/.linuxbrew/opt/nvm/etc/bash_completion.d/nvm"  
-  # This loads nvm bash_completion
-
-# echo "313"
-eval "$(zoxide init zsh)"
-# echo "316"
-eval "$(starship init zsh)"
-export STARSHIP_CONFIG=~/.dotFiles/starship.toml
-# echo "319"
+. "/mnt/main/ra0_0d/.deno/env"

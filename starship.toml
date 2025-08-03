@@ -9,11 +9,11 @@ $git_branch\
 $git_commit\
 $git_state\
 $git_status\
-$hg_branch\
+$nodejs\
 \n[╰─](bold bright-black)$character"""
 # palette = "catppuccin_mocha"
 # move the rest of the prompt to the right
-# right_format = """$golang$cmd_duration$battery $time"""
+right_format = """$cmd_duration"""
 command_timeout = 1000
 
 [directory.substitutions]
@@ -28,6 +28,7 @@ command_timeout = 1000
 
 [git_branch]
 format = "[ $symbol $branch(:$remote_branch)]($style)"
+symbol = " "
 # symbol = "[◬](bold bright-blue)"
 style = "bold italic green"
 
@@ -35,35 +36,41 @@ style = "bold italic green"
 # style = "italic bright-blue"
 format = """ ($ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed($style))"""
 # conflicted = "[◪◦](italic bright-magenta)"
-ahead = "[⇡ $count](bold green)"
-behind = "[ ⇣ $count ](bold bright-red)"
+ahead = "[⇡ $count](bold green) "
+behind = "[ ⇣ $count ](bold bright-red) "
 # diverged = "[◇ ▲┤[${ahead_count}](regular white)│▽┤[${behind_count}](regular white)│](italic bright-magenta)"
-untracked = " [? $count ](bold light-yellow)"
+untracked = " [? $count ](bold light-yellow) "
 # stashed = "[◦◫◦](italic white)"
-modified = " [▢ $count](bold  yellow)"
+modified = " [󰏫 $count](bold  yellow) "
 staged = "[▣ $count]( bold italic dark-yellow)"
-# renamed = "[◎◦](italic bright-blue)"
-deleted = " [✕](bold italic red)"
+# renamed = "[◎◦](italic bright-blue) "
+deleted = " [󰆴 $count](bold italic red) "
 [os]
-disabled=false
+disabled = false
 
 [[battery.display]]
 threshold = 90
-style="bold green"
+style = "bold green"
 
 [[battery.display]]
 threshold = 60
-style="bold yellow"
+style = "bold yellow"
 
 
 [[battery.display]]
 threshold = 20
 
 [time]
-disabled=false
-format=' ⏱️ [$time]($style) '
-use_12hr=true
-time_format="%R"
+disabled = true
+format = '   [$time]($style) '
+use_12hr = true
+time_format = "%R"
+
+[cmd_duration]
+min_time = 20
+show_milliseconds = true
+format = 'took [$duration](bold yellow)'
+
 [aws]
 symbol = "  "
 
@@ -83,7 +90,7 @@ symbol = " "
 symbol = " "
 
 [directory]
-format=' [$path]($style)[$read_only]($read_only_style) '
+format = ' [$path]($style)[$read_only]($read_only_style) '
 read_only = " 󰌾"
 style = "bold #0dafff"
 truncate_to_repo = false
@@ -150,6 +157,8 @@ symbol = " "
 
 [nodejs]
 symbol = " "
+disabled = false
+# format = 'via [🤖 $version](bold green) '
 
 [ocaml]
 symbol = " "

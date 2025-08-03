@@ -1,0 +1,24 @@
+;; defsrc is still necessary
+(defcfg
+  process-unmapped-keys yes
+)
+ 
+(defsrc
+   a s d ;
+)
+(defvar
+  tap-time  100
+  hold-time 200
+)
+
+(defalias
+  a (tap-hold $tap-time $hold-time a lctl)
+  s (tap-hold $tap-time $hold-time s lsft)
+  d (tap-hold $tap-time $hold-time d lalt)
+ ;; f (tap-hold $tap-time $hold-time f lmet)
+  ; (tap-hold $tap-time $hold-time ; rmet)
+)
+
+(deflayer base
+   @a @s @d @;
+)
