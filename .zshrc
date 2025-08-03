@@ -1,3 +1,5 @@
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/mnt/main/ra0_0d/.zsh/completions:"* ]]; then export FPATH="/mnt/main/ra0_0d/.zsh/completions:$FPATH"; fi
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -252,6 +254,8 @@ alias g="git"
 alias gs="git status"
 
 alias gP="git pull"
+alias gpl='git push --set-upstream origin $(git rev-parse --abbrev-ref HEAD)'
+
 
 alias gu="git pull"
 
