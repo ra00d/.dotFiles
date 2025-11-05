@@ -1,16 +1,25 @@
 return {
-  "snacks.nvim",
-  opts = {
-    explorer = {
-      enabled = true,
-    },
-    dashboard = {
-      enabled = true,
-      preset = {
-        pick = function(cmd, opts)
-          return LazyVim.pick(cmd, opts)()
+  {
+    "snacks.nvim",
+    opts = {
+      explorer = {
+        enabled = true,
+      },
+      image = {
+        enabled = true,
+        resolve = function(path, src)
+          if require("obsidian.api").path_is_note(path) then
+            return require("obsidian.api").resolve_image_path(src)
+          end
         end,
-        header = [[
+      },
+      dashboard = {
+        enabled = true,
+        preset = {
+          pick = function(cmd, opts)
+            return LazyVim.pick(cmd, opts)()
+          end,
+          header = [[
         ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
         ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
         ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
@@ -31,8 +40,27 @@ return {
           { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
           { icon = " ", key = "q", desc = "Quit", action = ":qa" },
         },
+        },
       },
     },
   },
-  {},
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "LazyFile",
+    opts = function()
+      local tsc = require("treesitter-context")
+      Snacks.toggle({
+        name = "Treesitter Context",
+        get = tsc.enabled,
+        set = function(state)
+          if state then
+            tsc.enable()
+          else
+            tsc.disable()
+          end
+        end,
+      }):map("<leader>ut")
+      return { mode = "cursor", max_lines = 3 }
+    end,
+  },
 }

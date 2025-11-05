@@ -11,8 +11,8 @@ return {
   },
   {
     "ibhagwan/fzf-lua",
-    keys = {
-      { "<ESC>", false },
-    },
+    enabled = false,
+    config = function() end,
+    keys = false,
   },
 }

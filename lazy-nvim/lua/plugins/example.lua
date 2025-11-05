@@ -39,24 +39,55 @@ return {
       defaults = {
         layout_strategy = "horizontal",
         layout_config = { prompt_position = "top" },
+file_ignore_patterns={
+    "node_modules",
+    ".git",
+    "dist",
+    "build",
+    "__pycache__",
+    "%.lock",
+    "venv",
+    ".venv",
+    "vinore",
+    "test/*/**.spec.*",
+    "*/**.spec.*",
+  },
         sorting_strategy = "ascending",
         winblend = 0,
       },
     },
-  },
+ },
   --
   -- add pyright to lspconfig
   -- add tsserver and setup with typescript.nvim instead of lspconfig
   {
     "neovim/nvim-lspconfig",
+    keys={
+      {'gd',false},
+      {'gr',false}
+    },
     dependencies = {
       "jose-elias-alvarez/typescript.nvim",
       init = function()
         require("lazyvim.util").lsp.on_attach(function(_, buffer)
+          local function opts(desc)
+            return { buffer = 0, desc = "LSP " .. desc }
+          end
+
+          local map=vim.keymap.set
+
+          map("n", "gd", require("telescope.builtin").lsp_definitions, opts("[G]oto [D]efinition"))
+          map("n", "gr", require("telescope.builtin").lsp_references, opts("[G]oto [R]eferences"))
+          map("n", "gI", require("telescope.builtin").lsp_implementations, opts("[G]oto [I]mplementation"))
+          map("n", "<space>D", require("telescope.builtin").lsp_type_definitions, opts("Type [D]efinition"))
+          map("n", "<space>ds", require("telescope.builtin").lsp_document_symbols, opts("[D]ocument [S]ymbols"))
+          map("n", "<space>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts("[W]orkspace [S]ymbols"))
+
+          map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
           -- stylua: ignore
-          vim.keymap.set("n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
-          vim.keymap.set("n", "<leader>fm", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
-          vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
+          -- vim.keymap.set("n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
+          -- vim.keymap.set("n", "<leader>fm", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
+          -- vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
         end)
       end,
     },
@@ -66,7 +97,9 @@ return {
         servers = {
           -- tsserver will be automatically installed with mason and loaded with lspconfig
           tsserver = {},
-          lua_ls = {}
+          lua_ls = {},
+          dockerls={},
+docker_compose_language_service={}
         },
         -- you can do any additional lsp server setup here
         -- return true if you don't want this server to be setup with lspconfig
@@ -80,7 +113,7 @@ return {
           -- ["*"] = function(server, opts) end,
         },
       }
-      opts.servers.lua_ls = ret.servers.lua_ls
+      -- opts.servers.lua_ls = ret.servers.lua_ls
       opts.servers.tsserver = ret.servers.tsserver
       opts.setup.tsserver = ret.setup.tsserver
       return opts
@@ -147,11 +180,11 @@ return {
 
   -- add any tools you want to have installed below
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = {
       ensure_installed = {
         "stylua",
-        "shellcheck",
+        -- "shellcheck",
         "shfmt",
         "flake8",
         'lua-language-server'

@@ -4,3 +4,6 @@
 --
 -- AI Options
 vim.g.ai_cmp = true
+vim.o.winborder = "rounded"
+
+vim.g.lazyvim_picker = "telescope"

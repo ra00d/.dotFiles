@@ -6,3 +6,9 @@
 --
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+--
+vim.cmd([[
+      autocmd User TelescopePreviewerLoaded setlocal number
+    ]])
+
+vim.api.nvim_set_hl(0, "TreesitterContext", { fg = "#cdd6f5", bg = "#1e1e2f" })

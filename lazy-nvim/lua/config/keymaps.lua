@@ -36,11 +36,6 @@ end, { desc = "Focus file tree" })
 map("n", "<space>x", "<cmd>bd<CR>", {
   desc = "Close current buffer",
 })
-
-map("n", ";", ":", {
-  desc = "Enter command mode",
-})
-
 map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
@@ -50,6 +45,14 @@ local options = { silent = true }
 local mappings = {
   n = {
     { lhs = "<C-s>", rhs = "<ESC>:silent w!<CR>", opts = { silent = true, desc = "save file" } },
+    {
+      lhs = "<leader>oe",
+      rhs = "<CMD>e .env<CR>",
+      opts = {
+        desc = "Open the .env file",
+        silent = true,
+      },
+    },
     -- {
     --   lhs = "<space>e",
     --   rhs = function()
@@ -111,12 +114,12 @@ local mappings = {
     -- TELESCOPE MAPPINGS
     {
       lhs = "<space>ff",
-      rhs = "<cmd>Telescope files<CR>",
+      rhs = "<cmd>Telescope find_files<CR>",
       opts = options,
     },
     {
       lhs = "<C-p>",
-      rhs = "<cmd>Telescope files<CR>",
+      rhs = "<cmd>Telescope find_files<CR>",
       opts = options,
     },
     {
@@ -124,6 +127,23 @@ local mappings = {
       rhs = "<cmd>Telescope live_grep<CR>",
       opts = options,
     },
+    {
+      lhs = "<space>fa",
+      rhs = "<cmd>Telescope aerial<CR>",
+      opts = {
+        desc = "Find aerial symbols",
+        silent = true,
+      },
+    },
+    {
+      lhs = "<space>fr",
+      rhs = "<cmd>Telescope resume<CR>",
+      opts = {
+        desc = "Resume last search",
+        silent = true,
+      },
+    },
+
     {
       lhs = "<space>fb",
       rhs = "<cmd>Telescope buffers initial_mode=normal sort=lastused sort=mru<CR>",
@@ -143,8 +163,25 @@ local mappings = {
     -- harpoon mappings
     {
       lhs = "<space>a",
-      rhs = "<cmd>lua require('harpoon.mark').add_file()<CR>",
-      opts = options,
+      rhs = function()
+        local harpoon = require("harpoon")
+        harpoon:list():add()
+      end,
+      opts = {
+        silent = true,
+        desc = "Add a file to harpoon list",
+      },
+    },
+    {
+      lhs = "<leader>h",
+      rhs = function()
+        local harpoon = require("harpoon")
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end,
+      opts = {
+        silent = true,
+        desc = "Show harpoon list",
+      },
     },
     -- DBUI MAPPINGS
     {
@@ -224,22 +261,31 @@ local mappings = {
       },
     },
   },
+  {
+    lhs = "jj",
+    rhs = function()
+      vim.fn["codeium#Accept"]()
+    end,
+    opts = { silent = true, desc = "Accept Codeium" },
+  },
 }
 
 vim.keymap.set("n", "[d", function()
-  vim.diagnostic.get_prev({ severity = {
-    min = vim.diagnostic.severity.HINT,
-  } })
+  vim.diagnostic.goto_next({
+    severity = {
+      min = vim.diagnostic.severity.HINT,
+    },
+  })
 end, { desc = "Go to previous [D]iagnostic message" })
 vim.keymap.set("n", "]d", function()
-  vim.diagnostic.get_next({
+  vim.diagnostic.goto_prev({
     severity = {
       min = vim.diagnostic.severity.HINT,
     },
   })
 end, { desc = "Go to next [D]iagnostic message" })
 vim.keymap.set("n", "[e", function()
-  vim.diagnostic.get_next({
+  vim.diagnostic.goto_next({
     severity = {
 
       min = vim.diagnostic.severity.ERROR,
@@ -247,17 +293,19 @@ vim.keymap.set("n", "[e", function()
   })
 end, { desc = "Go to previous diagnostic message" })
 vim.keymap.set("n", "]e", function()
-  vim.diagnostic.get_prev({ severity = { min = vim.diagnostic.severity.ERROR } })
+  vim.diagnostic.goto_prev({ severity = { min = vim.diagnostic.severity.ERROR } })
 end, { desc = "Go to next diagnostic message" })
 vim.keymap.set("n", "<space>k", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 vim.keymap.set("n", "gh", vim.diagnostic.open_float, { desc = "Open floating diagnostic message" })
 
 -- to disable changing the registers
--- vim.keymap.set({ "n", "v" }, "d", [["0d]], { noremap = true })
+vim.keymap.set({ "n", "v" }, "d", [["+d]], { noremap = true })
+vim.keymap.set({ "n", "v" }, "y", [["+y]], { noremap = true })
 -- delete without copying to clipboard
 vim.keymap.set({ "n", "v" }, "<space>d", [["_d]], { noremap = true })
 -- change without copying to clipboard
 vim.keymap.set({ "n", "v" }, "c", [["_c]], { noremap = true })
+vim.keymap.set({ "n", "v" }, "p", [["+p]], {})
 -- map({ "n", "v" }, "ciw", [["_ciw]])
 -- delete without copying to clipboard
 map({ "n", "v" }, "x", [["_x]])
