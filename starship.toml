@@ -2,7 +2,7 @@ add_newline = true
 # A minimal left prompt
 # format = """$directory$all$character"""
 format = """
-[╭─](bold bright-black)$os\
+[ ╭─](bold bright-black)$os\
 
 $directory\
 $git_branch\
@@ -10,10 +10,12 @@ $git_commit\
 $git_state\
 $git_status\
 $nodejs\
-\n[╰─](bold bright-black)$character"""
+$python\
+$go\
+\n[ ╰─](bold bright-black)$character"""
 # palette = "catppuccin_mocha"
 # move the rest of the prompt to the right
-right_format = """$cmd_duration"""
+right_format = """ $cmd_duration"""
 command_timeout = 1000
 
 [directory.substitutions]
@@ -222,6 +224,8 @@ symbol = " "
 
 [python]
 symbol = " "
+disabled = false
+pyenv_version_name = true
 
 [rlang]
 symbol = "󰟔 "

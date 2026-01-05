@@ -32,6 +32,7 @@ require("lazy").setup({
     { import = "plugins" },
   },
   defaults = {
+    ["utils.gitignore"] = true,
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
     -- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
     lazy = false,
@@ -45,6 +46,7 @@ require("lazy").setup({
     enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
   }, -- automatically check for plugin updates
+
   performance = {
     rtp = {
       -- disable some rtp plugins

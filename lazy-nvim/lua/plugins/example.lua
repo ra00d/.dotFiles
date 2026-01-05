@@ -68,29 +68,7 @@ file_ignore_patterns={
     },
     dependencies = {
       "jose-elias-alvarez/typescript.nvim",
-      init = function()
-        require("lazyvim.util").lsp.on_attach(function(_, buffer)
-          local function opts(desc)
-            return { buffer = 0, desc = "LSP " .. desc }
-          end
-
-          local map=vim.keymap.set
-
-          map("n", "gd", require("telescope.builtin").lsp_definitions, opts("[G]oto [D]efinition"))
-          map("n", "gr", require("telescope.builtin").lsp_references, opts("[G]oto [R]eferences"))
-          map("n", "gI", require("telescope.builtin").lsp_implementations, opts("[G]oto [I]mplementation"))
-          map("n", "<space>D", require("telescope.builtin").lsp_type_definitions, opts("Type [D]efinition"))
-          map("n", "<space>ds", require("telescope.builtin").lsp_document_symbols, opts("[D]ocument [S]ymbols"))
-          map("n", "<space>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts("[W]orkspace [S]ymbols"))
-
-          map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))
-          -- stylua: ignore
-          -- vim.keymap.set("n", "<leader>co", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
-          -- vim.keymap.set("n", "<leader>fm", "TypescriptOrganizeImports", { buffer = buffer, desc = "Organize Imports" })
-          -- vim.keymap.set("n", "<leader>cR", "TypescriptRenameFile", { desc = "Rename File", buffer = buffer })
-        end)
-      end,
-    },
+   },
     ---@class PluginLspOpts
     opts = function(_, opts)
       local ret = {

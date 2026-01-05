@@ -1,0 +1,19 @@
+//* ---- 💫 https://github.com/JaKooLit 💫 ---- *//
+/* Waybar Modules Extras */
+
+/* This is where you can add Extra Modules you wish. copy.sh will try to restore*/
+/* this file along with the unique configs and styles. */
+/* IMPORTANT, be mindful with , or ". else waybar will not start */
+
+{
+
+"user/menu": {
+    "format": "{}",
+    "exec": "echo ; echo 󱓟 app launcher",
+    "interval" : 86400, // once every day
+    "tooltip": true,
+    "on-click": "pkill rofi || rofi -show drun -modi run,drun,filebrowser,window",
+    "on-click-middle": "~/.config/hypr/scripts/wallpaperSelect.sh",
+    "on-click-right": "~/.config/hypr/scripts/WaybarLayout.sh",
+},
+}

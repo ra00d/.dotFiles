@@ -53,16 +53,16 @@ local mappings = {
         silent = true,
       },
     },
-    -- {
-    --   lhs = "<space>e",
-    --   rhs = function()
-    --     local oil = require("oil")
-    --     oil.toggle_float()
-    --     -- local MiniFiles = require('mini.files')
-    --     -- MiniFiles.open(vim.fn.expand("%p"))
-    --   end,
-    --   opts = options,
-    -- },
+    {
+      lhs = "<space>o",
+      rhs = function()
+        local oil = require("oil")
+        oil.open()
+        -- local MiniFiles = require('mini.files')
+        -- MiniFiles.open(vim.fn.expand("%p"))
+      end,
+      opts = options,
+    },
     -- {
     --   lhs = "<C-b>",
     --   rhs = "<cmd>NvimTreeToggle<CR>",
@@ -225,6 +225,11 @@ local mappings = {
     },
   },
   i = {
+    {
+      lhs = "<C-v>",
+      rhs = "<ESC>p<esc>i",
+      opts = { silent = true, desc = "save file" },
+    },
     { lhs = "<C-s>", rhs = "<ESC>:silent w!<CR><ESC>", opts = { silent = true, desc = "save file" } },
     {
       lhs = "<C-q>",
@@ -259,6 +264,13 @@ local mappings = {
       opts = {
         expr = true,
       },
+    },
+    {
+      lhs = "<leader>fm",
+      rhs = function()
+        return LazyVim.lsp.action["source.organizeImports"]
+      end,
+      opts = { desc = "Organize Imports", silent = true },
     },
   },
   {
@@ -321,18 +333,6 @@ local function setup_mappings()
     set_mode_mappings(mode, mode_mappings)
   end
 end
-
--- local nmap = function(keys, func, desc)
--- 	if desc then
--- 		desc = "LSP: " .. desc
--- 	end
---
--- 	vim.keymap.set("n", keys, func, { desc = desc })
--- end
-
--- See `:help K` for why this keymap
--- nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-
 -- Lesser used LSP functionality
 -- Call the setup function to load the mappings
 setup_mappings()
