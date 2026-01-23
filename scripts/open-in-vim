@@ -1,0 +1,30 @@
+#!/bin/bash
+input="$1"
+if [[ -z "$input" ]]; then
+    echo "Usage: $0 file:line[:column]"
+    exit 1
+fi
+
+# Parse file:line:column
+IFS=':' read -r file line col <<< "$input"
+
+# Validate
+if [[ -z "$file" || -z "$line" ]]; then
+    echo "Error: Invalid format. Use file:line[:column]"
+    exit 1
+fi
+
+# Check if column is numeric if provided
+if [[ -n "$col" && ! "$col" =~ ^[0-9]+$ ]]; then
+    echo "Error: Column must be a number"
+    exit 1
+fi
+
+# Send command to running Neovim instance
+if [[ -z "$col" ]]; then
+    # Jump to line only
+    nvim --server /tmp/nvim.sock --remote-send ":e $(printf '%q' "$file")<CR>:${line}<CR>zz"
+else
+    # Jump to line and column
+    nvim --server /tmp/nvim.sock --remote-send ":e $(printf '%q' "$file")<CR>:call cursor($line, $col)<CR>zz"
+fi

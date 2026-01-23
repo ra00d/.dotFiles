@@ -150,16 +150,10 @@ local mappings = {
       opts = options,
     },
     {
-      lhs = "<space><space>",
-      rhs = "<cmd>Telescope buffers initial_mode=normal sort=lastused sort=mru<CR>",
-      opts = options,
-    },
-    {
       lhs = "<space>fr",
       rhs = "<cmd>Telescope resume initial_mode=normal sort=lastused sort=mru<CR>",
       opts = options,
     },
-
     -- harpoon mappings
     {
       lhs = "<space>a",
@@ -223,6 +217,13 @@ local mappings = {
         desc = "Dismiss Notification messages",
       },
     },
+    {
+      lhs = "<leader>fm",
+      rhs = function()
+        return LazyVim.lsp.action["source.organizeImports"]
+      end,
+      opts = { desc = "Organize Imports", silent = true },
+    },
   },
   i = {
     {
@@ -264,13 +265,6 @@ local mappings = {
       opts = {
         expr = true,
       },
-    },
-    {
-      lhs = "<leader>fm",
-      rhs = function()
-        return LazyVim.lsp.action["source.organizeImports"]
-      end,
-      opts = { desc = "Organize Imports", silent = true },
     },
   },
   {

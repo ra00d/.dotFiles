@@ -1,6 +1,6 @@
 
 # ===================== CONFIGURATION =====================
-TMUX_AUTO_START=true               # Set to false to disable auto-start
+TMUX_AUTO_START=false               # Set to false to disable auto-start
 TMUX_START_PATH="$HOME/repositories/personal/"   # Default starting directory
 TMUX_SESSION_NAME="personal"           # Default session name
 TMUX_ATTACH_EXISTING=true          # Attach to existing session if true, create new if false
@@ -8,6 +8,9 @@ TMUX_ATTACH_EXISTING=true          # Attach to existing session if true, create 
 
 # Function to auto-start tmux
 tmux_autostart() {
+  if [  "$TERMINAL_EMULATOR" ] || [  "$TERM_PROGRAM" ]; then
+    return
+  fi
     # Exit if already in tmux or auto-start is disabled
     [ -n "$TMUX" ] && return
     [ "$TMUX_AUTO_START" != "true" ] && return
@@ -44,7 +47,7 @@ tmux_autostart() {
             tmux new-session -s "$new_session_name"
         fi
     else
-        echo "Creating new tmux session: $TMUX_SESSION_NAME"
+        # echo "Creating new tmux session: $TMUX_SESSION_NAME"
         tmux new-session -s "$TMUX_SESSION_NAME"
     fi
 }

@@ -21,7 +21,6 @@ function GenerateIndexExports()
 
   local dir = vim.fn.expand("%:h")
   local exports = {}
-
   -- Scan directory for .ts files
   for _, file in ipairs(vim.fn.glob(dir .. "/*.ts", false, true)) do
     local name = vim.fn.fnamemodify(file, ":t:r")

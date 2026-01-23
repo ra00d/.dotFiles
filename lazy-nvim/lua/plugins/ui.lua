@@ -4,6 +4,17 @@ return {
     opts = {
       picker = {
         enabled = false,
+        sources = {
+          explorer = {
+            win = {
+              list = {
+                keys = {
+                  ["o"] = "confirm",
+                },
+              },
+            },
+          },
+        },
       },
       explorer = {
         enabled = true,

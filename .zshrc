@@ -16,7 +16,7 @@ compinit
 CASE_SENSITIVE="true"
 
 
-if [[-f ~/.local_env_vars.zsh ]]; then
+if [[ -f ~/.local_env_vars.zsh ]]; then
   source ~/.local_env_vars.zsh
 fi
 
@@ -61,10 +61,10 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # ==================================================
 
 
-if [[ -f  $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh]]; then
+if [[ -f  $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
   source $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
-if [[ -f  $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh]]; then
+if [[ -f  $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
   source $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
@@ -199,6 +199,16 @@ alias nv="nvim "
 alias svim='sudo -E XDG_CONFIG_HOME=$HOME/.config nvim'
 
 # ==================================================
+# POSTGRESQL
+# ==================================================
+if  postgres -V &>/dev/null  ; then
+  # echo "PostgreSQL detected"
+export PGROOT=$HOME/.local/share/postgresql/$(postgres -V | awk '{print $3}')
+export PGDATA=$HOME/.local/share/postgresql/$(postgres -V | awk '{print $3}')/data
+fi
+
+
+# ==================================================
 # Aliases
 # ==================================================
 
@@ -215,7 +225,7 @@ alias -s ts='$EDITOR'
 alias -s html=open  # macOS: open in default browser
 
 # Arch Linux
-alias i="sudo pacman --needed -Syu"
+alias i="sudo pacman --needed -Sy"
 
 # ls
 alias ls="eza -l --icons --git"
@@ -264,8 +274,6 @@ alias kctl=kubectl
 alias k=kubectl
 alias mk=kubectl
 
-# cursor / vscode
-alias zed="zeditor"
 
 # ==================================================
 # Toolchains & PATH
@@ -330,8 +338,6 @@ export STARSHIP_CONFIG=~/.dotFiles/starship.toml
 . "/mnt/main/ra0_0d/.deno/env"
 
 
-export QT_QPA_PLATFORMTHEME="qt6ct"
-export WLR_DRM_DEVICES=/dev/dri/card0
 
 # alias php='php-legacy'
 

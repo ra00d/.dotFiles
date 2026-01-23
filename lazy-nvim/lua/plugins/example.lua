@@ -69,10 +69,52 @@ file_ignore_patterns={
     dependencies = {
       "jose-elias-alvarez/typescript.nvim",
    },
+
     ---@class PluginLspOpts
-    opts = function(_, opts)
+    opts={
+inlay_hints = {
+        enabled = false,
+        exclude = { "vue" }, -- filetypes for which you don't want to enable inlay hints
+      },
+      servers = {
+          jsonls={
+            settings = {
+             json = {
+documentLanguageSettings = {
+
+              comments = 'ignore',
+            trailingCommas = 'ignore',
+            allowTrailingCommas = true,
+          },
+ languageSettings = {
+                allowComments=true,
+              },
+            },
+          }},
+          -- tsserver will be automatically installed with mason and loaded with lspconfig
+        },
+        -- you can do any additional lsp server setup here
+        -- return true if you don't want this server to be setup with lspconfig
+        setup = {
+          -- example to setup with typescript.nvim
+          tsserver = function(_, opts)
+            require("typescript").setup({ server = opts })
+            return true
+          end,
+          -- Specify * to use this function as a fallback for any server
+          -- ["*"] = function(server, opts) end,
+        },
+    },
+    _opts = function(_, opts)
       local ret = {
         servers = {
+          jsonls={
+            settings = {
+              json = {
+                allowComments=true,
+              },
+            },
+          },
           -- tsserver will be automatically installed with mason and loaded with lspconfig
           tsserver = {},
           lua_ls = {},
