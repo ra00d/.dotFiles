@@ -1,5 +1,9 @@
 return {
   {
+    "mfussenegger/nvim-lint",
+    enabled = false,
+  },
+  {
     "folke/flash.nvim",
     enables = false,
     event = "VeryLazy",

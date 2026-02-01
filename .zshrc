@@ -348,3 +348,6 @@ export STARSHIP_CONFIG=~/.dotFiles/starship.toml
 # export socks_proxy="socks5://192.168.0.104:10808/"
 
 
+fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)
+fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)
+fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)

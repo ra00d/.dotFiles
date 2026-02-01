@@ -10,7 +10,6 @@ add-completion() {
     local cmd="${2:-$tool completion zsh}"
     local dir="${HOME}/.zsh/completions"
     local file="${dir}/_${tool}.zsh"
-    notify-send "Adding zsh completion for $cmd"
     mkdir -p "$dir"
     
     echo "Downloading completion for $tool..."
@@ -18,10 +17,10 @@ add-completion() {
         echo "✓ Saved to: $file"
         
         # Add to fpath if needed
-        # if [[ ! ":${fpath}:" == *":${dir}:"* ]]; then
-        #     echo "fpath=($dir \$fpath)" >> ~/.zshrc
-        #     echo "✓ Added $dir to fpath in ~/.zshrc"
-        # fi
+        if [[ ! ":${fpath}:" == *":${dir}:"* ]]; then
+            echo "fpath=($dir \$fpath)" >> ~/.zshrc
+            echo "✓ Added $dir to fpath in ~/.zshrc"
+        fi
         
         # Reinitialize completions
         autoload -Uz compinit && compinit
