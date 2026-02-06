@@ -47,3 +47,19 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.keymap.set("n", "<leader>ei", GenerateIndexExports, { buffer = true })
   end,
 })
+
+-- disable copilot if limit exceeded
+-- Create autocommand for LSP attachment
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client == nil then
+      return
+    end
+    if client.name ~= "copilot" then
+      return
+    end
+    vim.cmd([[Copilot disable]])
+  end,
+})
