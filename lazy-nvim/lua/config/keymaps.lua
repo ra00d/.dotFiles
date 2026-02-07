@@ -63,11 +63,6 @@ local mappings = {
       end,
       opts = options,
     },
-    -- {
-    --   lhs = "<C-b>",
-    --   rhs = "<cmd>NvimTreeToggle<CR>",
-    --   opts = options,
-    -- },
     {
       lhs = "<Tab>",
       rhs = "<cmd>bnext<CR>",

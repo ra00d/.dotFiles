@@ -9,17 +9,6 @@
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
-
-  -- { import = "lazyvim.plugins.extras.lang.typescript" },
-  -- { import = "lazyvim.plugins.extras.ui.mini-starter" },
-  -- { import = "lazyvim.plugins.extras.lang.json" },
-  -- Configure LazyVim to load gruvbox
-  -- {
-  --   "LazyVim/LazyVim",
-  --   opts = {
-  --     colorscheme = "gruvbox",
-  --   },
-  -- },
   -- override nvim-cmp and add cmp-emoji
   -- change some telescope options and a keymap to browse plugin files
   {
@@ -47,7 +36,6 @@ file_ignore_patterns={
     "__pycache__",
     "%.lock",
     "venv",
-    ".venv",
     "vinore",
     "test/*/**.spec.*",
     "*/**.spec.*",
