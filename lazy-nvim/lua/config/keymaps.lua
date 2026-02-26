@@ -107,20 +107,26 @@ local mappings = {
       opts = options,
     },
     -- TELESCOPE MAPPINGS
-    {
-      lhs = "<space>ff",
-      rhs = "<cmd>Telescope find_files<CR>",
-      opts = options,
-    },
+    -- {
+    --   lhs = "<space>ff",
+    --   rhs = "<cmd>Telescope find_files<CR>",
+    --   opts = options,
+    -- },
     {
       lhs = "<C-p>",
       rhs = "<cmd>Telescope find_files<CR>",
-      opts = options,
+      opts = {
+        silent = true,
+        desc = "Find files",
+      },
     },
     {
       lhs = "<space>fw",
       rhs = "<cmd>Telescope live_grep<CR>",
-      opts = options,
+      opts = {
+        silent = true,
+        desc = "search for word",
+      },
     },
     {
       lhs = "<space>fa",
@@ -132,7 +138,7 @@ local mappings = {
     },
     {
       lhs = "<space>fr",
-      rhs = "<cmd>Telescope resume<CR>",
+      rhs = "<cmd>Telescope resume initial_mode=normal sort=lastused sort=mru<CR>",
       opts = {
         desc = "Resume last search",
         silent = true,
@@ -142,11 +148,6 @@ local mappings = {
     {
       lhs = "<space>fb",
       rhs = "<cmd>Telescope buffers initial_mode=normal sort=lastused sort=mru<CR>",
-      opts = options,
-    },
-    {
-      lhs = "<space>fr",
-      rhs = "<cmd>Telescope resume initial_mode=normal sort=lastused sort=mru<CR>",
       opts = options,
     },
     -- harpoon mappings
@@ -176,34 +177,37 @@ local mappings = {
     {
       lhs = "<space>tdb",
       rhs = "<cmd>DBUIToggle<CR>",
-      opts = options,
-    },
-    -- HOP
-    {
-      lhs = "<space>hw",
-      rhs = "<cmd>HopWord<CR>",
       opts = {
-        desc = "jump next word",
         silent = true,
+        desc = "launch db tools",
       },
     },
-
-    {
-      lhs = "<space>hc",
-      rhs = "<cmd>HopChar1<CR>",
-      opts = {
-        desc = "jump  char",
-        silent = true,
-      },
-    },
-    {
-      lhs = "<space>hl",
-      rhs = "<cmd>HopLine<CR>",
-      opts = {
-        desc = "jump  line",
-        silent = true,
-      },
-    },
+    -- -- HOP
+    -- {
+    --   lhs = "<space>hw",
+    --   rhs = "<cmd>HopWord<CR>",
+    --   opts = {
+    --     desc = "jump next word",
+    --     silent = true,
+    --   },
+    -- },
+    --
+    -- {
+    --   lhs = "<space>hc",
+    --   rhs = "<cmd>HopChar1<CR>",
+    --   opts = {
+    --     desc = "jump  char",
+    --     silent = true,
+    --   },
+    -- },
+    -- {
+    --   lhs = "<space>hl",
+    --   rhs = "<cmd>HopLine<CR>",
+    --   opts = {
+    --     desc = "jump  line",
+    --     silent = true,
+    --   },
+    -- },
     {
       lhs = "<space>dn",
       rhs = "<cmd>NoiceDismiss<CR>",
@@ -215,7 +219,7 @@ local mappings = {
     {
       lhs = "<leader>fm",
       rhs = function()
-        return LazyVim.lsp.action["source.organizeImports"]
+        return LazyVim.lsp.action.source.organizeImports
       end,
       opts = { desc = "Organize Imports", silent = true },
     },
@@ -224,13 +228,13 @@ local mappings = {
     {
       lhs = "<C-v>",
       rhs = "<ESC>p<esc>i",
-      opts = { silent = true, desc = "save file" },
+      opts = { silent = true, desc = "paste text" },
     },
     { lhs = "<C-s>", rhs = "<ESC>:silent w!<CR><ESC>", opts = { silent = true, desc = "save file" } },
     {
       lhs = "<C-q>",
       rhs = ":qa<CR>",
-      opts = { desc = "quite all", silent = true },
+      opts = { desc = "quite all and save", silent = true },
     },
     {
       lhs = "<C-x>",
@@ -262,13 +266,13 @@ local mappings = {
       },
     },
   },
-  {
-    lhs = "jj",
-    rhs = function()
-      vim.fn["codeium#Accept"]()
-    end,
-    opts = { silent = true, desc = "Accept Codeium" },
-  },
+  -- {
+  --   lhs = "jj",
+  --   rhs = function()
+  --     vim.fn["codeium#Accept"]()
+  --   end,
+  --   opts = { silent = true, desc = "Accept Codeium" },
+  -- },
 }
 
 vim.keymap.set("n", "[d", function()
@@ -329,12 +333,5 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left wind
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
-
-map("n", "gd", require("telescope.builtin").lsp_definitions, opts("[G]oto [D]efinition"))
-map("n", "gr", require("telescope.builtin").lsp_references, opts("[G]oto [R]eferences"))
-map("n", "gI", require("telescope.builtin").lsp_implementations, opts("[G]oto [I]mplementation"))
-map("n", "<space>D", require("telescope.builtin").lsp_type_definitions, opts("Type [D]efinition"))
-map("n", "<space>ds", require("telescope.builtin").lsp_document_symbols, opts("[D]ocument [S]ymbols"))
-map("n", "<space>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, opts("[W]orkspace [S]ymbols"))
 
 map("n", "<leader>D", vim.lsp.buf.type_definition, opts("Go to type definition"))

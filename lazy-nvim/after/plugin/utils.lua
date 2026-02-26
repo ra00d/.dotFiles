@@ -1,7 +1,14 @@
 local utils_path = vim.fn.stdpath("config") .. "/lua/utils/"
-for _, file in ipairs(vim.fn.readdir(utils_path)) do
-  if file:sub(-4) == ".lua" then
-    local module_name = "utils." .. file:sub(1, -5)
-    pcall(require, module_name)
-  end
+
+-- Find all Lua files recursively
+local lua_files = vim.fn.globpath(utils_path, "**/*.lua", false, true)
+
+for _, file in ipairs(lua_files) do
+  -- Convert file path to module name
+  -- Example: /path/to/lua/utils/db/postgres.lua -> utils.db.postgres
+  local module_name = file
+    :gsub("^.*/lua/", "") -- Remove path up to /lua/
+    :gsub("%.lua$", "") -- Remove .lua extension
+    :gsub("/", ".") -- Replace / with .
+  pcall(require, module_name)
 end

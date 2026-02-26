@@ -11,7 +11,6 @@ return {
   --   "BufNewFile path/to/my-vault/*.md",
   -- },
   ---@module 'obsidian'
-  ---@type obsidian.config
   opts = {
 
     workspaces = {

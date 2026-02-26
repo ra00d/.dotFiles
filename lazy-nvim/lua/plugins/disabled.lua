@@ -1,11 +1,8 @@
 return {
-  {
-    "mfussenegger/nvim-lint",
-    enabled = false,
-  },
+
   {
     "folke/flash.nvim",
-    enables = false,
+    enabled = true,
     event = "VeryLazy",
     vscode = true,
     ---@type Flash.Config

@@ -9,7 +9,7 @@ glyph_offset = { x = 0, y = 0 }
 
 [window]
 decorations = "None"
-opacity = 0.7
+opacity = 0.9
 blur = true
 
 [scrolling]

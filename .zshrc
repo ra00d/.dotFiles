@@ -341,13 +341,17 @@ export STARSHIP_CONFIG=~/.dotFiles/starship.toml
 
 # alias php='php-legacy'
 
-# export HTTP_PROXY="http://192.168.0.104:44355/"
-# export HTTPS_PROXY="http://192.168.0.104:44355/"
-# export http_proxy="http://192.168.0.104:44355/"
-# export https_proxy="http://192.168.0.104:44355/"
-# export socks_proxy="socks5://192.168.0.104:10808/"
+# export HTTP_PROXY="http://192.168.0.201:44355/"
+# export HTTPS_PROXY="http://192.168.0.201:44355/"
+# export http_proxy="http://192.168.0.201:44355/"
+# export https_proxy="http://192.168.0.201:44355/"
+# export socks_proxy="socks5://192.168.0.201:10808/"
 
 
 fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)
 fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)
+fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)
+
+# bun completions
+[ -s "/mnt/main/ra0_0d/.bun/_bun" ] && source "/mnt/main/ra0_0d/.bun/_bun"
 fpath=(/mnt/main/ra0_0d/.zsh/completions $fpath)
